@@ -1,0 +1,32 @@
+/* Ссылка на issue: https://github.com/bpmbpm/rdf-grapher/issues/236 */
+/* Ссылка на issue: https://github.com/bpmbpm/rdf-grapher/issues/284 */
+/* 1_example_data.css - Стили для модуля загрузки примеров */
+
+/* Стили загрузки примеров уже определены в styles.css (.description, .example-status, .example-link и т.д.) */
+
+/* issue #284: Стили для выпадающего списка примеров */
+.example-select-container {
+    margin-bottom: 10px;
+}
+
+#example-select {
+    width: 100%;
+    max-width: 300px;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: white;
+    cursor: pointer;
+}
+
+#example-select:hover {
+    border-color: #4CAF50;
+}
+
+#example-select:focus {
+    outline: none;
+    border-color: #4CAF50;
+    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+}
+

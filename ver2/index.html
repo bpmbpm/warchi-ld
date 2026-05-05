@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>warchi-ld ver2 — Архитектурный редактор (VAD, Linked Data)</title>
+    <!--
+        warchi-ld ver2 — issue #5
+        Браузерный JS архитектурный редактор в нотации VAD с движком Linked Data.
+        Внешний вид: warchi.ru | Технологическое ядро: rdf-grapher/ver9d (quadstore/N3.js)
+        Изменения относительно ver1:
+         - Убраны: Smart Design (3_sd), окно RDF-данных (2_triplestore), Graphviz-редактор диаграммы как код
+         - Добавлены: Матрица связей компонентов, Лог (нижнее окно)
+         - VAD трафарет: все элементы из легенды, левая сторона Процесса — прямая
+    -->
+
+    <!-- Базовые стили и стили модулей -->
+    <link rel="stylesheet" href="warchi_ld.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="1_example_data/1_example_data.css">
+    <link rel="stylesheet" href="4_resSPARQL/4_resSPARQL.css">
+    <link rel="stylesheet" href="5_publisher/5_publisher.css">
+    <link rel="stylesheet" href="5_publisher/5_publisher_treeview/5_publisher_treeview_search.css">
+    <link rel="stylesheet" href="6_legend/6_legend.css">
+    <link rel="stylesheet" href="7_info/7_info.css">
+    <link rel="stylesheet" href="8_infoSPARQL/8_infoSPARQL.css">
+    <link rel="stylesheet" href="10_virtualTriG/10_virtualTriG.css">
+    <link rel="stylesheet" href="11_reasoning/11_reasoning.css">
+
+    <style>
+        /* ── Матрица связей компонентов ─────────────────────────────────── */
+        .matrix-container {
+            overflow: auto;
+            max-height: 400px;
+        }
+        .matrix-table {
+            border-collapse: collapse;
+            font-size: 11px;
+            font-family: Arial, sans-serif;
+            min-width: 100%;
+        }
+        .matrix-table th, .matrix-table td {
+            border: 1px solid #ccc;
+            padding: 4px 6px;
+            text-align: center;
+            white-space: nowrap;
+        }
+        .matrix-table th {
+            background: #f0f4f8;
+            font-weight: bold;
+        }
+        .matrix-table th.matrix-row-header {
+            text-align: left;
+            min-width: 120px;
+        }
+        .matrix-table td.matrix-cell-yes {
+            background: #c8e6c9;
+            color: #1b5e20;
+            font-weight: bold;
+        }
+        .matrix-table td.matrix-cell-no {
+            background: #fff;
+            color: #ccc;
+        }
+        .matrix-empty {
+            color: #999;
+            font-size: 12px;
+            padding: 12px;
+        }
+        /* ── Лог (нижнее окно) ──────────────────────────────────────────── */
+        #window-log .window-content {
+            padding: 0;
+        }
+        #log-panel-content {
+            font-family: monospace;
+            font-size: 11px;
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 8px;
+            min-height: 80px;
+            max-height: 200px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        .log-toolbar {
+            display: flex;
+            gap: 6px;
+            padding: 4px 8px;
+            background: #2d2d2d;
+            border-bottom: 1px solid #444;
+        }
+        .log-toolbar .btn {
+            font-size: 11px;
+            padding: 2px 8px;
+            background: #3c3c3c;
+            color: #ccc;
+            border: 1px solid #555;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .log-toolbar .btn:hover { background: #4c4c4c; }
+        /* ── Трафарет VAD ────────────────────────────────────────────────── */
+        .stencil-panel {
+            padding: 8px;
+        }
+        .stencil-section-title {
+            font-size: 11px;
+            font-weight: bold;
+            color: #555;
+            margin: 8px 0 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .stencil-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 8px;
+        }
+        .stencil-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            cursor: grab;
+            user-select: none;
+        }
+        .stencil-item:hover { opacity: 0.8; }
+        .stencil-shape-svg {
+            display: block;
+        }
+        .stencil-item-label {
+            font-size: 10px;
+            color: #444;
+            text-align: center;
+            max-width: 70px;
+        }
+        .stencil-edge-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 5px;
+        }
+        .stencil-edge-line {
+            flex: 1;
+            height: 3px;
+            border-radius: 1px;
+        }
+        .stencil-edge-label {
+            font-size: 10px;
+            color: #444;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body>
+
+<!-- =====================================================================
+     СТРОКА МЕНЮ (warchi-style)
+     ===================================================================== -->
+<div id="menu-bar" class="menu-bar">
+    <div class="menu-logo">warchi-ld</div>
+
+    <!-- Файл -->
+    <div class="menu-item" id="menu-file">
+        <span class="menu-item-label">Файл</span>
+        <div class="menu-dropdown" id="dropdown-file">
+            <div class="menu-dropdown-item" onclick="newProject()">Новый проект</div>
+            <div class="menu-dropdown-item" onclick="openProject()">Открыть…</div>
+            <div class="menu-dropdown-item" onclick="document.getElementById('file-input').click()">Открыть TTL/TriG…</div>
+            <div class="menu-dropdown-separator"></div>
+            <div class="menu-dropdown-item" onclick="saveAsFile()">Сохранить как…</div>
+            <div class="menu-dropdown-item" onclick="exportSVG()">Экспорт SVG</div>
+            <div class="menu-dropdown-item" onclick="exportPNG()">Экспорт PNG</div>
+        </div>
+    </div>
+
+    <!-- Правка -->
+    <div class="menu-item" id="menu-edit">
+        <span class="menu-item-label">Правка</span>
+        <div class="menu-dropdown" id="dropdown-edit">
+            <div class="menu-dropdown-item" onclick="showRdfEditWindow()">Редактировать RDF…</div>
+        </div>
+    </div>
+
+    <!-- Вид -->
+    <div class="menu-item" id="menu-view">
+        <span class="menu-item-label">Вид</span>
+        <div class="menu-dropdown" id="dropdown-view">
+            <div class="menu-dropdown-item" onclick="toggleSidebar()">Боковая панель</div>
+            <div class="menu-dropdown-item" onclick="togglePanel('1_example_data')">Примеры данных</div>
+            <div class="menu-dropdown-item" onclick="togglePanel('5_publisher')">Диаграмма</div>
+            <div class="menu-dropdown-item" onclick="togglePanel('6_legend')">Легенда</div>
+            <div class="menu-dropdown-item" onclick="togglePanel('8_infoSPARQL')">SPARQL</div>
+            <div class="menu-dropdown-item" onclick="togglePanel('matrix')">Матрица связей</div>
+            <div class="menu-dropdown-item" onclick="togglePanel('log')">Лог</div>
+            <div class="menu-dropdown-separator"></div>
+            <div class="menu-dropdown-item" onclick="refreshVisualization()">Обновить диаграмму</div>
+        </div>
+    </div>
+
+    <!-- Нотация -->
+    <div class="menu-item" id="menu-notation">
+        <span class="menu-item-label">Нотация</span>
+        <div class="menu-dropdown" id="dropdown-notation">
+            <div class="menu-dropdown-item menu-dropdown-item--active">VAD (Value Added Diagram)</div>
+        </div>
+    </div>
+
+    <!-- Инструменты -->
+    <div class="menu-item" id="menu-tools">
+        <span class="menu-item-label">Инструменты</span>
+        <div class="menu-dropdown" id="dropdown-tools">
+            <div class="menu-dropdown-item" onclick="showVirtualTriGWindow()">Virtual TriG</div>
+            <div class="menu-dropdown-item" onclick="togglePanel('11_reasoning')">Reasoning</div>
+            <div class="menu-dropdown-item" onclick="testRdfValidation()">Валидация RDF</div>
+            <div class="menu-dropdown-separator"></div>
+            <div class="menu-dropdown-item" onclick="clearRdfInput()">Очистить хранилище</div>
+        </div>
+    </div>
+
+    <!-- Справка -->
+    <div class="menu-item" id="menu-help">
+        <span class="menu-item-label">Справка</span>
+        <div class="menu-dropdown" id="dropdown-help">
+            <div class="menu-dropdown-item" onclick="showHelp()">Документация</div>
+            <div class="menu-dropdown-item" onclick="showAbout()">О программе</div>
+        </div>
+    </div>
+
+    <div class="menu-spacer"></div>
+    <div class="menu-status" id="menu-status">Готов</div>
+</div>
+
+<!-- =====================================================================
+     ЛИНЕЙКА ИНСТРУМЕНТОВ (warchi-style toolbar)
+     ===================================================================== -->
+<div id="toolbar" class="toolbar">
+    <button class="toolbar-btn" onclick="newProject()" title="Новый проект">
+        <span class="toolbar-icon">&#128196;</span>
+    </button>
+    <button class="toolbar-btn" onclick="document.getElementById('file-input').click()" title="Открыть TTL/TriG файл">
+        <span class="toolbar-icon">&#128193;</span>
+    </button>
+    <button class="toolbar-btn" onclick="saveAsFile()" title="Сохранить">
+        <span class="toolbar-icon">&#128190;</span>
+    </button>
+    <div class="toolbar-separator"></div>
+    <button class="toolbar-btn" onclick="refreshVisualization()" title="Обновить диаграмму">
+        <span class="toolbar-icon">&#8635;</span>
+    </button>
+    <button class="toolbar-btn" onclick="exportSVG()" title="Экспорт SVG">SVG</button>
+    <button class="toolbar-btn" onclick="exportPNG()" title="Экспорт PNG">PNG</button>
+    <div class="toolbar-separator"></div>
+    <button class="toolbar-btn toolbar-btn--secondary" onclick="togglePanel('log')" title="Окно лога">Лог</button>
+    <div class="toolbar-separator"></div>
+    <!-- Фильтр TriG -->
+    <select id="trig-filter" onchange="updateTrigFilter()" title="Фильтр TriG данных" class="toolbar-select">
+        <option value="objectTreePlusVad" selected>ObjectTree + VADProcessDia</option>
+        <option value="objectTree">ObjectTree</option>
+        <option value="vadProcessDia">VADProcessDia</option>
+        <option value="techtree">TechTree</option>
+        <option value="vadontology">VADontology</option>
+        <option value="virtual">Virtual TriG</option>
+        <option value="all">Все TriG</option>
+    </select>
+    <div class="toolbar-separator"></div>
+    <!-- Файловый ввод (скрытый) -->
+    <input type="file" id="file-input" style="display:none;" accept=".ttl,.rdf,.nt,.nq,.trig" onchange="loadFile(event)">
+</div>
+
+<!-- =====================================================================
+     ОСНОВНАЯ РАБОЧАЯ ОБЛАСТЬ
+     ===================================================================== -->
+<div id="main-layout" class="main-layout">
+
+    <!-- ----------------------------------------------------------------
+         ЛЕВАЯ БОКОВАЯ ПАНЕЛЬ (Навигатор / Treeview)
+         ---------------------------------------------------------------- -->
+    <div id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <span>Навигатор</span>
+            <button class="sidebar-toggle-btn" onclick="toggleSidebar()" title="Скрыть панель">&#9664;</button>
+        </div>
+
+        <!-- Вкладки навигатора -->
+        <div class="sidebar-tabs">
+            <button class="sidebar-tab sidebar-tab--active" onclick="showSidebarTab('treeview')" id="tab-treeview">Дерево</button>
+            <button class="sidebar-tab" onclick="showSidebarTab('properties')" id="tab-properties">Свойства</button>
+            <button class="sidebar-tab" onclick="showSidebarTab('stencil')" id="tab-stencil">Трафарет</button>
+        </div>
+
+        <!-- Дерево процессов/исполнителей -->
+        <div class="sidebar-tab-content" id="sidebar-tab-treeview">
+            <div id="treeview-container">
+                <div class="treeview-empty">Загрузите данные для отображения дерева</div>
+            </div>
+        </div>
+
+        <!-- Панель свойств выбранного объекта -->
+        <div class="sidebar-tab-content sidebar-tab-content--hidden" id="sidebar-tab-properties">
+            <div id="properties-panels-container">
+                <div class="properties-empty">Выберите элемент на диаграмме</div>
+            </div>
+        </div>
+
+        <!-- Трафарет VAD — все элементы из легенды -->
+        <div class="sidebar-tab-content sidebar-tab-content--hidden" id="sidebar-tab-stencil">
+            <div class="stencil-panel" id="vad-stencil-panel">
+                <!-- Заполняется через initVADStencil() -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Кнопка раскрытия скрытой боковой панели -->
+    <button id="sidebar-open-btn" class="sidebar-open-btn" onclick="toggleSidebar()" style="display:none;" title="Открыть панель">&#9654;</button>
+
+    <!-- ----------------------------------------------------------------
+         ЦЕНТРАЛЬНАЯ ОБЛАСТЬ — ПАНЕЛИ (collapsible windows)
+         ---------------------------------------------------------------- -->
+    <div id="content-area" class="content-area">
+
+        <!-- Пример данных (папка /dia) -->
+        <div class="window-section" id="window-1_example_data">
+            <div class="window-header" onclick="togglePanel('1_example_data')">
+                <h3>Загрузить пример данных (папка /dia)</h3>
+                <span class="window-toggle" id="toggle-1_example_data">&#9660;</span>
+            </div>
+            <div class="window-content" id="content-1_example_data">
+                <div class="example-select-container">
+                    <select id="example-select" onchange="loadSelectedExample()">
+                        <option value="">-- Выберите пример --</option>
+                    </select>
+                </div>
+                <div id="example-status" class="example-status" style="display:none;"></div>
+            </div>
+        </div>
+
+        <!-- Result SPARQL -->
+        <div class="window-section" id="window-4_resSPARQL">
+            <div class="window-header" onclick="togglePanel('4_resSPARQL')">
+                <h3>Result SPARQL</h3>
+                <span class="window-toggle" id="toggle-4_resSPARQL">&#9660;</span>
+            </div>
+            <div class="window-content" id="content-4_resSPARQL">
+                <div id="sparql-result-container"></div>
+            </div>
+        </div>
+
+        <!-- Визуализация (Publisher) — Graphviz SVG -->
+        <div class="window-section" id="window-5_publisher">
+            <div class="window-header" onclick="togglePanel('5_publisher')">
+                <h3>Диаграмма</h3>
+                <span class="window-toggle" id="toggle-5_publisher">&#9660;</span>
+            </div>
+            <div class="window-content" id="content-5_publisher">
+                <div class="publisher-toolbar">
+                    <button class="btn" onclick="visualize()">Визуализировать</button>
+                    <button class="btn" onclick="refreshVisualization()">Обновить</button>
+                    <button class="btn" onclick="exportSVG()">SVG</button>
+                    <button class="btn" onclick="exportPNG()">PNG</button>
+                    <button class="btn" onclick="zoomIn_()">+</button>
+                    <button class="btn" onclick="zoomOut_()">−</button>
+                    <button class="btn" onclick="zoomReset_()">100%</button>
+                </div>
+                <div id="result-container" style="display:none;">
+                    <div id="zoom-container">
+                        <div id="zoom-controls" style="display:none;"></div>
+                        <div id="output" class="output-container"></div>
+                    </div>
+                    <div id="vad-trig-container" style="display:none;">
+                        <div id="vad-trig-zoom-controls" style="display:none;"></div>
+                        <div id="vad-trig-output" class="output-container"></div>
+                    </div>
+                </div>
+                <div id="export-buttons" style="display:none;"></div>
+                <div id="legend-panel" style="display:none;"><div id="legend-content"></div></div>
+                <div id="error-output" class="error-output" style="display:none;"></div>
+            </div>
+        </div>
+
+        <!-- Легенда -->
+        <div class="window-section" id="window-6_legend">
+            <div class="window-header" onclick="togglePanel('6_legend')">
+                <h3>Легенда</h3>
+                <span class="window-toggle" id="toggle-6_legend">&#9654;</span>
+            </div>
+            <div class="window-content" id="content-6_legend" style="display:none;">
+                <div id="legend-container"></div>
+            </div>
+        </div>
+
+        <!-- Информация (префиксы, дерево TriG) -->
+        <div class="window-section" id="window-7_info">
+            <div class="window-header" onclick="togglePanel('7_info')">
+                <h3>Префиксы и TriG дерево</h3>
+                <span class="window-toggle" id="toggle-7_info">&#9654;</span>
+            </div>
+            <div class="window-content" id="content-7_info" style="display:none;">
+                <div id="prefixes-panel" style="display:none;">
+                    <div id="prefixes-content"></div>
+                </div>
+                <div id="trig-tree-panel">
+                    <div id="trig-tree-content"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SPARQL запросы -->
+        <div class="window-section" id="window-8_infoSPARQL">
+            <div class="window-header" onclick="togglePanel('8_infoSPARQL')">
+                <h3>SPARQL запросы</h3>
+                <span class="window-toggle" id="toggle-8_infoSPARQL">&#9660;</span>
+            </div>
+            <div class="window-content" id="content-8_infoSPARQL">
+                <div id="sparql-panel-container"></div>
+            </div>
+        </div>
+
+        <!-- Матрица связей компонентов -->
+        <div class="window-section" id="window-matrix">
+            <div class="window-header" onclick="togglePanel('matrix')">
+                <h3>Матрица связей компонентов</h3>
+                <span class="window-toggle" id="toggle-matrix">&#9654;</span>
+            </div>
+            <div class="window-content" id="content-matrix" style="display:none;">
+                <div class="matrix-container" id="matrix-container">
+                    <div class="matrix-empty">Загрузите данные для отображения матрицы</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Virtual TriG -->
+        <div class="window-section" id="window-10_virtualTriG" style="display:none;">
+            <div class="window-header" onclick="togglePanel('10_virtualTriG')">
+                <h3>Virtual TriG</h3>
+                <span class="window-toggle" id="toggle-10_virtualTriG">&#9660;</span>
+            </div>
+            <div class="window-content" id="content-10_virtualTriG">
+                <div id="virtual-trig-container"></div>
+            </div>
+        </div>
+
+        <!-- Reasoning -->
+        <div class="window-section" id="window-11_reasoning" style="display:none;">
+            <div class="window-header" onclick="togglePanel('11_reasoning')">
+                <h3>Reasoning</h3>
+                <span class="window-toggle" id="toggle-11_reasoning">&#9660;</span>
+            </div>
+            <div class="window-content" id="content-11_reasoning">
+                <div id="reasoning-container"></div>
+            </div>
+        </div>
+
+        <!-- ЛОГ (самое нижнее окно) -->
+        <div class="window-section" id="window-log">
+            <div class="window-header" onclick="togglePanel('log')">
+                <h3>Лог</h3>
+                <span class="window-toggle" id="toggle-log">&#9660;</span>
+            </div>
+            <div class="window-content" id="content-log">
+                <div class="log-toolbar">
+                    <button class="btn" onclick="clearLogPanel()">Очистить</button>
+                </div>
+                <pre id="log-panel-content"></pre>
+            </div>
+        </div>
+
+    </div><!-- /content-area -->
+</div><!-- /main-layout -->
+
+<!-- =====================================================================
+     СТАТУСНАЯ СТРОКА
+     ===================================================================== -->
+<div id="status-bar" class="status-bar">
+    <span id="status-text">Готов</span>
+    <span id="status-triples" class="status-triples"></span>
+    <span id="status-graphs" class="status-graphs"></span>
+</div>
+
+<!-- =====================================================================
+     МОДАЛЬНЫЕ ОКНА
+     ===================================================================== -->
+<div id="modal-overlay" class="modal-overlay" style="display:none;" onclick="closeAllModals()"></div>
+
+<!-- Скрытые элементы для quadstore (внутреннее хранилище) -->
+<textarea id="rdf-input" style="display:none;"></textarea>
+<select id="input-format" style="display:none;"><option value="trig" selected>TriG</option></select>
+<select id="output-format" style="display:none;"><option value="svg" selected>SVG</option></select>
+<select id="layout-engine" style="display:none;"><option value="dot" selected>dot</option></select>
+<select id="visualization-mode" style="display:none;"><option value="vad-trig" selected>VAD TriG</option></select>
+<select id="sparql-mode" style="display:none;"><option value="smart-design" selected>SPARQL Smart Design</option></select>
+<input type="number" id="max-label-length" value="25" style="display:none;">
+
+<!-- Окно Virtual TriG -->
+<div id="virtual-trig-window" class="modal-window" style="display:none;">
+    <div class="modal-header">
+        <span>Virtual TriG (вычисляемые данные)</span>
+        <button class="modal-close" onclick="closeVirtualTriGWindow()">&#10005;</button>
+    </div>
+    <div class="modal-body">
+        <textarea id="virtual-trig-textarea" readonly placeholder="Virtual TriG данные…"></textarea>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" onclick="closeVirtualTriGWindow()">Закрыть</button>
+    </div>
+</div>
+
+<!-- =====================================================================
+     БИБЛИОТЕКИ (CDN — браузерный JS)
+     ===================================================================== -->
+<!-- N3.js — парсинг RDF/TriG -->
+<script src="https://unpkg.com/n3/browser/n3.min.js"></script>
+<!-- Comunica — SPARQL движок -->
+<script src="https://unpkg.com/@comunica/query-sparql-rdfjs@3/comunica-browser.js"></script>
+<!-- Viz.js — рендеринг Graphviz (v2.x) -->
+<script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script>
+<script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script>
+<script>
+if (typeof Viz === 'function' && !Viz.instance) {
+    Viz.instance = function() { return Promise.resolve(new Viz()); };
+}
+</script>
+
+<!-- =====================================================================
+     МОДУЛИ ПРИЛОЖЕНИЯ
+     ===================================================================== -->
+<!-- Базовая библиотека -->
+<script src="9_vadlib/vadlib_sparql.js"></script>
+<script src="9_vadlib/vadlib_sparql_v2.js"></script>
+<script src="9_vadlib/vadlib_logic.js"></script>
+<script src="9_vadlib/vadlib_ui.js"></script>
+
+<!-- Модуль примеров данных -->
+<script src="1_example_data/1_example_data_logic.js"></script>
+
+<!-- Triplestore (quadstore) — только логика, без UI-панели -->
+<script src="2_triplestore/2_triplestore_logic.js"></script>
+<script src="2_triplestore/2_triplestore_ui.js"></script>
+
+<!-- Publisher / визуализация -->
+<script src="5_publisher/5_publisher_sparql.js"></script>
+<script src="5_publisher/5_publisher_treeview/5_publisher_treeview_search.js"></script>
+<script src="5_publisher/5_publisher_treeview/5_publisher_treeview_ui.js"></script>
+<script src="5_publisher/5_publisher_logic.js"></script>
+<script src="5_publisher/5_publisher_ui.js"></script>
+
+<!-- Легенда -->
+<script src="6_legend/6_legend_ui.js"></script>
+
+<!-- Info -->
+<script src="7_info/7_info_ui.js"></script>
+
+<!-- Result SPARQL -->
+<script src="4_resSPARQL/4_resSPARQL_ui.js"></script>
+
+<!-- SPARQL панель -->
+<script src="8_infoSPARQL/8_infoSPARQL_sparql.js"></script>
+<script src="8_infoSPARQL/8_infoSPARQL_ui.js"></script>
+
+<!-- Virtual TriG -->
+<script src="10_virtualTriG/10_virtualTriG_sparql.js"></script>
+<script src="10_virtualTriG/10_virtualTriG_logic.js"></script>
+<script src="10_virtualTriG/10_virtualTriG_ui.js"></script>
+
+<!-- Reasoning -->
+<script src="11_reasoning/11_reasoning_sparql.js"></script>
+<script src="11_reasoning/11_reasoning_logic.js"></script>
+
+<!-- =====================================================================
+     WARCHI-LD VER2 — UI модуль
+     ===================================================================== -->
+<script src="warchi_ld_v2_ui.js"></script>
+
+<!-- =====================================================================
+     ИНИЦИАЛИЗАЦИЯ
+     ===================================================================== -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    initWarchiLDv2();
+});
+</script>
+
+</body>
+</html>

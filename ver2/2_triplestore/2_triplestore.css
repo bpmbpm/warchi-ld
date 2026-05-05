@@ -1,0 +1,16 @@
+/* Ссылка на issue: https://github.com/bpmbpm/rdf-grapher/issues/236 */
+/* 2_triplestore.css - Стили для модуля Triplestore (RDF данные) */
+
+/* Стили контейнера RDF данных уже определены в styles.css (.container, .rdf-input-header и т.д.) */
+/* Стили для модального окна тестирования определены в styles.css (.test-result-modal и т.д.) */
+
+/* Стиль для кнопки "Список проверок" в модальном окне тестирования */
+.test-result-checks-btn {
+    background-color: #FF9800;
+    color: white;
+}
+
+.test-result-checks-btn:hover {
+    background-color: #F57C00;
+}
+

@@ -1,0 +1,1093 @@
+# ==============================================================================
+# Tech Appendix - Технологические классы и объекты (TriG Format)
+# ==============================================================================
+#
+# Автор: warchi-ld Project
+# Версия: 1.0 (ver1) - issue #1
+# Дата создания: 2026-05-05
+# Дата обновления: 2026-05-05
+# Проект: https://github.com/bpmbpm/warchi-ld/tree/main/ver1/index.html
+#
+# Описание:
+# Данный файл представляет vad-basic-ontology_tech_Appendix.ttl в формате TriG
+# с именованным графом vad:techtree. Это обеспечивает совместимость с архитектурой
+# quadstore согласно Правилу 2: "В Quadstore хранятся только данные в формате TriG".
+#
+# vad-basic-ontology_tech_Appendix.trig (технологическая онтология) загружается при старте для использования в semantic reasoning
+# через comunica-feature-reasoning.
+#
+# СВЯЗАННЫЕ ФАЙЛЫ:
+# - vad-basic-ontology_tech_Appendix.ttl - исходный файл в формате Turtle
+# - vad-basic-ontology.trig - базовая онтология VAD (→ vad:VADontology)
+#
+# ==============================================================================
+
+@prefix rdf:      <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:     <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:      <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:      <http://www.w3.org/2001/XMLSchema#> .
+@prefix dcterms:  <http://purl.org/dc/terms/> .
+@prefix vad:      <http://example.org/vad#> .
+
+# ==============================================================================
+# ИМЕНОВАННЫЙ ГРАФ vad:techtree
+# ==============================================================================
+# Все технологические классы и объекты хранятся в этом графе.
+# Граф типа vad:TechnoTree - не отображается в treeview окна Publisher.
+# ==============================================================================
+
+vad:techtree {
+
+    # ==========================================================================
+    # МЕТАДАННЫЕ ГРАФА vad:techtree
+    # ==========================================================================
+
+    vad:techtree rdf:type vad:TechnoTree ;
+        rdfs:label "Дерево Технологических Данных" ;
+        vad:hasParentObj vad:techroot ;
+        rdfs:comment """
+            Именованный граф, содержащий технологические классы и объекты.
+            Загружается для semantic reasoning через comunica.
+        """ ;
+        dcterms:description "Дерево технологических данных из ontology в формате TriG" .
+
+    # ==========================================================================
+    # ТЕХНОЛОГИЧЕСКИЙ КЛАСС (TECH CLASS)
+    # ==========================================================================
+
+    vad:Tech
+        rdf:type rdfs:Class, owl:Class ;
+        rdfs:label "Tech" ;
+        rdfs:comment """
+            Технологический класс (Tech) - базовый класс для технологических объектов.
+
+            Технологические объекты используются для явного определения групп предикатов,
+            применяемых для различных типов объектов в системе. Это позволяет:
+            - Использовать явно заданный список предикатов для анализа
+            - Формировать справочники на основе определённых групп предикатов
+            - Документировать структуру данных в онтологии
+            - Указывать автоматически генерируемые предикаты
+
+            Подклассы именуются по правилу:
+            - Concept* - для концептуальных (общих) свойств объектов
+            - Individ* - для индивидуальных свойств объектов
+
+            Связь с JS-кодом: PTREE_PREDICATES, RTREE_PREDICATES и другие константы
+        """ ;
+        dcterms:description "Базовый класс для технологических объектов, определяющих группы предикатов" .
+
+    # ==========================================================================
+    # КЛАСС AUTO AUTOFILL (АВТОЗАПОЛНЕНИЕ)
+    # ==========================================================================
+
+    vad:Auto
+        rdf:type rdfs:Class, owl:Class ;
+        rdfs:subClassOf vad:Tech ;
+        rdfs:label "Auto" ;
+        rdfs:comment """
+            Класс Auto (Автозаполнение) - технологический класс для объектов,
+            формируемых автоматически на основе определённых правил.
+
+            Объекты этого класса описывают данные, которые генерируются
+            программой автоматически и не требуют ручного ввода пользователем.
+
+            Примеры автоматически генерируемых объектов:
+            - vad:isSubprocessTrig - связь процесса с TriG при создании нового индивида
+            - vad:ExecutorGroup_{processId} - группа исполнителей при создании процесса
+            - ID нового TriG (t_{processId}) - при создании через "New TriG (VADProcessDia)"
+            - rdfs:label нового TriG - формируется на основе label концепта процесса
+            - vad:processSubtype - вычисляется автоматически на основе hasTrig и hasParentObj
+
+            Связь с JS-кодом: объекты типа Auto отображаются серым цветом
+            и недоступны для ручного выбора пользователем.
+        """ ;
+        dcterms:description "Класс для автоматически генерируемых объектов (автозаполнение)" .
+
+    # --------------------------------------------------------------------------
+    # Автоматически генерируемые объекты (экземпляры vad:Auto)
+    # --------------------------------------------------------------------------
+
+    vad:AutoIsSubprocessTrig
+        rdf:type vad:Auto ;
+        rdfs:label "AutoIsSubprocessTrig" ;
+        vad:generatesProperty vad:isSubprocessTrig ;
+        vad:generationRule "При создании нового индивида процесса автоматически добавляется триплет: {процесс} vad:isSubprocessTrig {текущий_TriG}" ;
+        rdfs:comment "Автоматическая генерация vad:isSubprocessTrig при создании индивида процесса" ;
+        dcterms:description "Связь процесса с содержащим его TriG (автоматически)" .
+
+    vad:AutoExecutorGroup
+        rdf:type vad:Auto ;
+        rdfs:label "AutoExecutorGroup" ;
+        vad:generatesProperty vad:hasExecutor ;
+        vad:generationRule "При создании нового индивида процесса автоматически создаётся ExecutorGroup с id vad:ExecutorGroup_{processId}" ;
+        rdfs:comment "Автоматическая генерация группы исполнителей при создании индивида процесса" ;
+        dcterms:description "Группа исполнителей процесса (автоматически)" .
+
+    vad:AutoNewTrigId
+        rdf:type vad:Auto ;
+        rdfs:label "AutoNewTrigId" ;
+        vad:generatesProperty rdf:ID ;
+        vad:generationRule "ID нового TriG формируется как t_{processId} на основе выбранного концепта процесса" ;
+        rdfs:comment "Автоматическая генерация ID для нового TriG" ;
+        dcterms:description "ID нового TriG (автоматически)" .
+
+    vad:AutoNewTrigLabel
+        rdf:type vad:Auto ;
+        rdfs:label "AutoNewTrigLabel" ;
+        vad:generatesProperty rdfs:label ;
+        vad:generationRule "rdfs:label нового TriG формируется как 'Схема t_{processId} процесса {processLabel}'" ;
+        rdfs:comment "Автоматическая генерация label для нового TriG" ;
+        dcterms:description "Label нового TriG (автоматически)" .
+
+    vad:AutoProcessSubtype
+        rdf:type vad:Auto ;
+        rdfs:label "AutoProcessSubtype" ;
+        vad:generatesProperty vad:processSubtype ;
+        vad:generationRule """
+            vad:processSubtype вычисляется автоматически по алгоритму:
+            1. Если концепт процесса имеет vad:hasTrig в ptree -> это Detailed (и далее определяется подтип)
+               - Если индивид процесса находится в схеме родительского процесса -> DetailedChild
+               - Иначе -> DetailedExternal
+            2. Если концепт процесса НЕ имеет vad:hasTrig в ptree -> это notDetailed
+               - Если индивид процесса находится в схеме родительского процесса -> notDetailedChild
+               - Иначе -> notDetailedExternal
+            3. Если vad:hasParentObj = vad:pNotDefined -> NotDefinedType
+        """ ;
+        rdfs:comment "Автоматическое вычисление vad:processSubtype на основе hasTrig и hasParentObj" ;
+        dcterms:description "Подтип процесса (вычисляется автоматически)" .
+
+    # --------------------------------------------------------------------------
+    # Предикат vad:generatesProperty - указывает генерируемое свойство
+    # --------------------------------------------------------------------------
+
+    vad:generatesProperty
+        rdf:type rdf:Property, owl:ObjectProperty ;
+        rdfs:label "generatesProperty" ;
+        rdfs:domain vad:Auto ;
+        rdfs:range rdf:Property ;
+        rdfs:comment """
+            Предикат generatesProperty связывает объект Auto с предикатом,
+            который генерируется автоматически.
+        """ ;
+        dcterms:description "Указывает свойство, генерируемое автоматически" .
+
+    # --------------------------------------------------------------------------
+    # Предикат vad:generationRule - описывает правило генерации
+    # --------------------------------------------------------------------------
+
+    vad:generationRule
+        rdf:type rdf:Property, owl:DatatypeProperty ;
+        rdfs:label "generationRule" ;
+        rdfs:domain vad:Auto ;
+        rdfs:range xsd:string ;
+        rdfs:comment """
+            Предикат generationRule описывает текстовое правило,
+            по которому генерируется автоматическое значение.
+        """ ;
+        dcterms:description "Описывает правило автоматической генерации" .
+
+    # ==========================================================================
+    # ПРЕДИКАТ hasNodeStyle - ОПРЕДЕЛЕНИЕ ВИЗУАЛЬНОГО СТИЛЯ УЗЛА
+    # ==========================================================================
+
+    vad:hasNodeStyle
+        rdf:type rdf:Property, owl:DatatypeProperty ;
+        rdfs:label "hasNodeStyle" ;
+        rdfs:domain rdfs:Class ;
+        rdfs:range xsd:string ;
+        rdfs:comment """
+            Предикат hasNodeStyle определяет визуальный стиль узла в формате DOT.
+
+            Используется для подтипов процессов, которые имеют отдельное визуальное
+            представление на диаграмме:
+            - vad:DetailedChild - голубая заливка
+            - vad:DetailedExternal - синяя заливка
+            - vad:notDetailedChild - зелёная заливка
+            - vad:notDetailedExternal - светло-зелёная заливка
+            - vad:NotDefinedType - серая заливка (пунктир)
+
+            Промежуточные классы (vad:Detailed, vad:notDetailed) НЕ имеют этого
+            свойства, т.к. они не отображаются в легенде как отдельные стили.
+
+            Значение представляет собой DOT-атрибуты узла, например:
+            'shape="cds" height="0.8" width="1.5" color="#1565C0" fillcolor="#90CAF9"'
+
+            Связь с JS-кодом: значения считываются при старте программы и
+            используются для настройки VADNodeStyles.
+        """ ;
+        dcterms:description "Визуальный стиль узла в формате DOT (для подтипов со стилями)" .
+
+    vad:styleLegendLabel
+        rdf:type rdf:Property, owl:DatatypeProperty ;
+        rdfs:label "styleLegendLabel" ;
+        rdfs:domain rdfs:Class ;
+        rdfs:range xsd:string ;
+        rdfs:comment """
+            Предикат styleLegendLabel определяет краткое название стиля для легенды.
+
+            Используется вместе с vad:hasNodeStyle для формирования легенды стилей.
+            Значение должно быть кратким (2-3 слова) и понятным пользователю.
+
+            Примеры:
+            - "Детализ. подпроцесс (DetailedChild)"
+            - "Не детализ. внешний (notDetailedExternal)"
+        """ ;
+        dcterms:description "Краткое название стиля для легенды" .
+
+    # ==========================================================================
+    # ПОДТИПЫ ПРОЦЕССОВ (PROCESS SUBTYPES)
+    # ==========================================================================
+    # issue #361: Перенесены с исправлениями:
+    # - CollorVadShape -> ColorVadShape (исправление опечатки)
+    # - VadXPredicat -> VadXPredicate (исправление опечатки)
+    # ==========================================================================
+
+    # --------------------------------------------------------------------------
+    # ColorVadShape - Зонтичный класс для подтипов процессов (определяет цвет)
+    # --------------------------------------------------------------------------
+    # issue #357: Суперкласс для vad:Detailed, vad:notDetailed, vad:NotDefinedType
+    # issue #361: Исправлено CollorVadShape -> ColorVadShape
+    # Определяет цвет VAD-элемента на схеме
+    # --------------------------------------------------------------------------
+
+    vad:ColorVadShape
+        rdf:type rdfs:Class, owl:Class ;
+        rdfs:label "ColorVadShape" ;
+        rdfs:comment """
+            Зонтичный класс ColorVadShape (Color VAD Shape) - суперкласс для подтипов процессов.
+
+            issue #357: Определяет цвет VAD-элемента на схеме.
+            issue #361: Исправлено CollorVadShape -> ColorVadShape
+
+            Подклассы:
+            - vad:Detailed - детализированные процессы (голубые/синие оттенки)
+            - vad:notDetailed - не детализированные процессы (зелёные оттенки)
+            - vad:NotDefinedType - процессы с неопределённым родителем (серый)
+
+            Логика обработки остаётся прежней - данный класс добавлен для
+            организации иерархии классов и не влияет на код.
+        """ ;
+        dcterms:description "Зонтичный класс для подтипов процессов, определяющий цвет VAD-элемента" .
+
+    # --------------------------------------------------------------------------
+    # Detailed - Детализированный процесс (базовый класс)
+    # --------------------------------------------------------------------------
+
+    vad:Detailed
+        rdf:type rdfs:Class, owl:Class ;
+        rdfs:subClassOf vad:ColorVadShape ;
+        rdfs:label "Detailed" ;
+        rdfs:comment """
+            Детализированный процесс (Detailed) - процесс с детализацией.
+
+            Признак: концепт процесса имеет связанную дочернюю схему процесса
+            через предикат vad:hasTrig в vad:ptree.
+
+            При двойном клике на такой процесс происходит переход
+            к его детализирующей схеме.
+
+            Имеет два подтипа:
+            - vad:DetailedChild - индивид находится в схеме родительского процесса
+            - vad:DetailedExternal - индивид находится во внешней схеме
+
+            Значение vad:processSubtype вычисляется автоматически и хранится
+            в virtualRDFdata, а не в RDF-данных.
+        """ ;
+        dcterms:description "Детализированный процесс (имеет дочернюю схему)" .
+
+    # --------------------------------------------------------------------------
+    # DetailedChild - Детализированный процесс (подпроцесс)
+    # --------------------------------------------------------------------------
+
+    vad:DetailedChild
+        rdf:type rdfs:Class, owl:Class ;
+        rdfs:subClassOf vad:Detailed ;
+        rdfs:label "DetailedChild" ;
+        vad:hasNodeStyle "shape=\"cds\" height=\"0.8\" width=\"1.5\" color=\"#1565C0\" fillcolor=\"#90CAF9\" fontname=\"Arial\" fontsize=\"11\" style=\"filled\"" ;
+        vad:styleLegendLabel "Детализ. подпроцесс (DetailedChild)" ;
+        rdfs:comment """
+            DetailedChild - детализированный процесс, являющийся подпроцессом.
+
+            Признак: индивид процесса находится в схеме, которая является схемой
+            его родительского процесса (определяется через vad:hasParentObj).
+
+            Пример:
+            - Процесс vad:p1.1.1 имеет vad:hasParentObj vad:p1.1
+            - Индивид vad:p1.1.1 находится в TriG vad:t_p1.1
+            - TriG vad:t_p1.1 имеет vad:hasParentObj vad:p1.1
+            - Следовательно, индивид находится в схеме родительского процесса -> DetailedChild
+
+            Визуализация: голубая заливка (#90CAF9) с синей рамкой (#1565C0).
+        """ ;
+        dcterms:description "Детализированный процесс-подпроцесс" .
+
+    # --------------------------------------------------------------------------
+    # DetailedExternal - Детализированный процесс (внешний)
+    # --------------------------------------------------------------------------
+
+    vad:DetailedExternal
+        rdf:type rdfs:Class, owl:Class ;
+        rdfs:subClassOf vad:Detailed ;
+        rdfs:label "DetailedExternal" ;
+        vad:hasNodeStyle "shape=\"cds\" height=\"0.8\" width=\"1.5\" color=\"#0D47A1\" fillcolor=\"#64B5F6\" fontname=\"Arial\" fontsize=\"11\" style=\"filled\"" ;
+        vad:styleLegendLabel "Детализ. внешний (DetailedExternal)" ;
+        rdfs:comment """
+            DetailedExternal - детализированный процесс, не являющийся подпроцессом.
+
+            Признак: индивид процесса находится в схеме, которая НЕ является схемой
+            его родительского процесса.
+
+            Пример:
+            - Процесс vad:p1.1.2 имеет vad:hasParentObj vad:p2 (не p1.1)
+            - Индивид vad:p1.1.2 находится в TriG vad:t_p1.1
+            - TriG vad:t_p1.1 имеет vad:hasParentObj vad:p1.1 (не p2)
+            - Следовательно, индивид находится во внешней схеме -> DetailedExternal
+
+            Визуализация: синяя заливка (#64B5F6) с тёмно-синей рамкой (#0D47A1).
+        """ ;
+        dcterms:description "Детализированный внешний процесс" .
+
+    # --------------------------------------------------------------------------
+    # notDetailed - Не детализированный процесс (базовый класс)
+    # --------------------------------------------------------------------------
+
+    vad:notDetailed
+        rdf:type rdfs:Class, owl:Class ;
+        rdfs:subClassOf vad:ColorVadShape ;
+        rdfs:label "notDetailed" ;
+        rdfs:comment """
+            Не детализированный процесс (notDetailed) - процесс без детализации.
+
+            Признак: концепт процесса НЕ имеет связанной дочерней схемы процесса
+            (отсутствует vad:hasTrig в vad:ptree).
+
+            Является "листовым" элементом - при клике не происходит
+            переход к детализирующей схеме.
+
+            Имеет два подтипа:
+            - vad:notDetailedChild - индивид находится в схеме родительского процесса
+            - vad:notDetailedExternal - индивид находится во внешней схеме
+
+            Значение vad:processSubtype вычисляется автоматически и хранится
+            в virtualRDFdata, а не в RDF-данных.
+        """ ;
+        dcterms:description "Не детализированный процесс (без дочерней схемы)" .
+
+    # --------------------------------------------------------------------------
+    # notDetailedChild - Не детализированный процесс (подпроцесс)
+    # --------------------------------------------------------------------------
+
+    vad:notDetailedChild
+        rdf:type rdfs:Class, owl:Class ;
+        rdfs:subClassOf vad:notDetailed ;
+        rdfs:label "notDetailedChild" ;
+        vad:hasNodeStyle "shape=\"cds\" height=\"0.8\" width=\"1.5\" color=\"#2E7D32\" fillcolor=\"#A5D6A7\" fontname=\"Arial\" fontsize=\"11\" style=\"filled\"" ;
+        vad:styleLegendLabel "Не детализ. подпроцесс (notDetailedChild)" ;
+        rdfs:comment """
+            notDetailedChild - не детализированный процесс, являющийся подпроцессом.
+
+            Признак: индивид процесса без vad:hasTrig находится в схеме,
+            которая является схемой его родительского процесса.
+
+            Визуализация: зелёная заливка (#A5D6A7) с тёмно-зелёной рамкой (#2E7D32).
+        """ ;
+        dcterms:description "Не детализированный процесс-подпроцесс" .
+
+    # --------------------------------------------------------------------------
+    # notDetailedExternal - Не детализированный процесс (внешний)
+    # --------------------------------------------------------------------------
+
+    vad:notDetailedExternal
+        rdf:type rdfs:Class, owl:Class ;
+        rdfs:subClassOf vad:notDetailed ;
+        rdfs:label "notDetailedExternal" ;
+        vad:hasNodeStyle "shape=\"cds\" height=\"0.8\" width=\"1.5\" color=\"#1B5E20\" fillcolor=\"#C8E6C9\" fontname=\"Arial\" fontsize=\"11\" style=\"filled\"" ;
+        vad:styleLegendLabel "Не детализ. внешний (notDetailedExternal)" ;
+        rdfs:comment """
+            notDetailedExternal - не детализированный процесс, не являющийся подпроцессом.
+
+            Признак: индивид процесса без vad:hasTrig находится в схеме,
+            которая НЕ является схемой его родительского процесса.
+
+            Визуализация: светло-зелёная заливка (#C8E6C9) с тёмно-зелёной рамкой (#1B5E20).
+        """ ;
+        dcterms:description "Не детализированный внешний процесс" .
+
+    # --------------------------------------------------------------------------
+    # NotDefinedType - Процесс с неопределённым родителем
+    # --------------------------------------------------------------------------
+
+    vad:NotDefinedType
+        rdf:type rdfs:Class, owl:Class ;
+        rdfs:subClassOf vad:ColorVadShape ;
+        rdfs:label "NotDefinedType" ;
+        vad:hasNodeStyle "shape=\"cds\" height=\"0.8\" width=\"1.5\" color=\"#616161\" fillcolor=\"#BDBDBD\" fontname=\"Arial\" fontsize=\"11\" style=\"filled,dashed\"" ;
+        vad:styleLegendLabel "Неопред. родитель (NotDefinedType)" ;
+        rdfs:comment """
+            NotDefinedType - процесс с неопределённым родительским элементом.
+
+            Признак: в концепте процесса свойство vad:hasParentObj указывает
+            на vad:pNotDefined.
+
+            Пример:
+            vad:pх.х rdf:type vad:TypeProcess ;
+                rdfs:label "pх.х Процесс х.х" ;
+                dcterms:description "Какой-то процесс" ;
+                vad:hasParentObj vad:pNotDefined .
+
+            Такие процессы не могут быть использованы для создания новых TriG
+            до указания корректного родительского элемента.
+
+            Визуализация: серая заливка (#BDBDBD) с пунктирной рамкой (#616161).
+        """ ;
+        dcterms:description "Процесс с неопределённым родителем (pNotDefined)" .
+
+    # ==========================================================================
+    # ВИРТУАЛЬНЫЕ ДАННЫЕ (VIRTUAL RDF DATA)
+    # ==========================================================================
+
+    vad:Virtual
+        rdf:type rdfs:Class, owl:Class ;
+        rdfs:subClassOf vad:Tech ;
+        rdfs:label "Virtual" ;
+        rdfs:comment """
+            Класс Virtual - технологический класс для виртуальных TriG-контейнеров.
+
+            issue #264: Виртуальные TriG теперь хранятся в общем quadstore и имеют
+            обязательный предикат vad:hasParentObj, указывающий на родительский VADProcessDia.
+
+            Виртуальные контейнеры (virtualRDFdata) хранят вычисляемые свойства объектов,
+            которые рассчитываются автоматически на основе данных из vad:ptree и VADProcessDia.
+
+            Виртуальные TriG имеют имя vt_{processId} (v = virtual, t = trig) вместо t_{processId}.
+
+            СТРУКТУРА ВИРТУАЛЬНОГО TriG:
+            vad:vt_p1 {
+                vad:vt_p1 rdf:type vad:Virtual ;
+                    vad:hasParentObj vad:t_p1 .  # Родительский физический TriG (VADProcessDia)
+
+                vad:p1.1 vad:processSubtype vad:DetailedChild .
+                vad:p1.2 vad:processSubtype vad:notDetailedChild .
+            }
+
+            Содержимое virtualRDFdata:
+            1. vad:vt_p1 rdf:type vad:Virtual - свойства самого виртуального TriG
+            2. vad:hasParentObj - ссылка на родительский физический TriG
+            3. vad:processSubtype - вычисленный подтип процесса
+
+            ПРАВИЛО УДАЛЕНИЯ (issue #264):
+            При удалении VADProcessDia (vad:t_p1) должен также удаляться
+            соответствующий дочерний TriG типа vad:Virtual (vad:vt_p1).
+
+            Пересчёт значений происходит:
+            - При запуске index.html
+            - При изменении схемы процесса (добавление/удаление процессов)
+
+            Просмотр виртуальных данных осуществляется через кнопку «virtualRDFdata»
+            или через фильтр «Virtual» в окне quadstore.
+
+            Деревья типа vad:Virtual не отображаются в treeview окна Publisher.
+        """ ;
+        dcterms:description "Класс для виртуальных TriG-контейнеров с вычисляемыми свойствами" .
+
+    # ==========================================================================
+    # ПРЕДИКАТЫ ВКЛЮЧЕНИЯ (INCLUSION PREDICATES)
+    # ==========================================================================
+
+    vad:includePredicate
+        rdf:type rdf:Property, owl:ObjectProperty ;
+        rdfs:label "includePredicate" ;
+        rdfs:domain vad:Tech ;
+        rdfs:range rdf:Property ;
+        rdfs:comment """
+            Предикат includePredicate связывает технологический объект
+            с предикатами (как RDF-объектами), которые он включает.
+
+            Пример:
+            vad:ConceptProcessPredicate vad:includePredicate rdf:type, rdfs:label .
+
+            Это позволяет явно перечислить все предикаты, входящие в группу,
+            и использовать эту информацию для анализа или формирования справочников.
+        """ ;
+        dcterms:description "Связывает технологический объект с включаемыми предикатами" .
+
+    vad:autoGeneratedPredicate
+        rdf:type rdf:Property, owl:ObjectProperty ;
+        rdfs:label "autoGeneratedPredicate" ;
+        rdfs:domain vad:Tech ;
+        rdfs:range rdf:Property ;
+        rdfs:comment """
+            Предикат autoGeneratedPredicate указывает, какие предикаты
+            генерируются автоматически при создании объекта данного типа.
+
+            Такие предикаты отображаются в справочнике серым цветом
+            и недоступны для ручного выбора пользователем.
+
+            Пример:
+            vad:IndividProcessPredicate vad:autoGeneratedPredicate vad:isSubprocessTrig, vad:hasExecutor .
+
+            При создании нового индивида процесса эти предикаты добавляются автоматически.
+        """ ;
+        dcterms:description "Указывает автоматически генерируемые предикаты для типа объекта" .
+
+    # ==========================================================================
+    # ЗОНТИЧНЫЙ КЛАСС ПРЕДИКАТОВ (UMBRELLA PREDICATE CLASS)
+    # ==========================================================================
+
+    # --------------------------------------------------------------------------
+    # VadXPredicate - Зонтичный класс для технологических объектов предикатов
+    # --------------------------------------------------------------------------
+    # issue #357: Суперкласс для группировки объектов предикатов
+    # issue #361: Исправлено VadXPredicat -> VadXPredicate
+    # --------------------------------------------------------------------------
+
+    vad:VadXPredicate
+        rdf:type rdfs:Class, owl:Class ;
+        rdfs:subClassOf vad:Tech ;
+        rdfs:label "VadXPredicate" ;
+        rdfs:comment """
+            Зонтичный класс VadXPredicate - суперкласс для технологических объектов,
+            определяющих группы предикатов.
+
+            issue #357: Объединяет все классы *Predicate.
+            issue #361: Исправлено VadXPredicat -> VadXPredicate
+
+            Подклассы:
+            - vad:ConceptProcessPredicate - предикаты концептов процессов
+            - vad:IndividProcessPredicate - предикаты индивидов процессов
+            - vad:ConceptExecutorPredicate - предикаты концептов исполнителей
+            - vad:ConceptExecutorGroupPredicate - предикаты групп исполнителей
+            - vad:ConceptTriGPredicate - предикаты TriG схем
+
+            Логика обработки остаётся прежней - данный класс добавлен для
+            организации иерархии классов и не влияет на код.
+        """ ;
+        dcterms:description "Зонтичный класс для технологических объектов предикатов" .
+
+    # ==========================================================================
+    # ТЕХНОЛОГИЧЕСКИЕ ОБЪЕКТЫ ДЛЯ ПРОЦЕССОВ (PROCESS TECH OBJECTS)
+    # ==========================================================================
+
+    # --------------------------------------------------------------------------
+    # vad:ConceptProcessPredicate - Общие свойства процессов (PTREE_PREDICATES)
+    # --------------------------------------------------------------------------
+
+    vad:ConceptProcessPredicate
+        rdf:type vad:VadXPredicate ;
+        rdfs:label "ConceptProcessPredicate" ;
+        vad:includePredicate rdf:type, rdfs:label, dcterms:description, vad:hasParentObj, vad:hasTrig ;
+        rdfs:comment """
+            Группа «Общие свойства процессов для всех схем процессов» (PTREE_PREDICATES).
+
+            Объект ConceptProcessPredicate (класса Tech) включает предикаты,
+            которые используются для объектов типа TypeProcess в vad:ptree:
+            - rdf:type - тип объекта (vad:Process)
+            - rdfs:label - название процесса
+            - dcterms:description - описание процесса
+            - vad:hasParentObj - родительский элемент в иерархии (issue #278)
+            - vad:hasTrig - ссылка на TriG-схему детализации
+
+            Это свойства концепта процесса, общие для всех схем.
+
+            Связь с JS-кодом: константа PTREE_PREDICATES
+        """ ;
+        dcterms:description "Группа общих свойств процессов для всех схем (PTREE_PREDICATES)" .
+
+    # --------------------------------------------------------------------------
+    # vad:IndividProcessPredicate - Индивидуальные свойства процесса
+    # --------------------------------------------------------------------------
+
+    vad:IndividProcessPredicate
+        rdf:type vad:VadXPredicate ;
+        rdfs:label "IndividProcessPredicate" ;
+        vad:includePredicate vad:isSubprocessTrig, vad:hasExecutor, vad:processSubtype, vad:hasNext ;
+        vad:autoGeneratedPredicate vad:isSubprocessTrig, vad:hasExecutor ;
+        rdfs:comment """
+            Группа «Индивидуальные свойства процесса для конкретной схемы».
+
+            Объект IndividProcessPredicate (класса Tech) включает предикаты,
+            которые используются для объектов типа Process в конкретной схеме
+            (VADProcessDia):
+            - vad:isSubprocessTrig - связь с TriG (добавляется первым, АВТОМАТИЧЕСКИ)
+            - vad:hasExecutor - группа исполнителей (АВТОМАТИЧЕСКИ)
+            - vad:processSubtype - подтип процесса (Basic, Detailed, DetailedChild, DetailedExternal)
+            - vad:hasNext - следующий процесс в цепочке
+
+            Автоматически генерируемые предикаты (vad:autoGeneratedPredicate):
+            - vad:isSubprocessTrig - при создании нового индивида процесса
+            - vad:hasExecutor - при создании нового индивида процесса
+
+            Связь с JS-кодом: входят в VAD_ALLOWED_PREDICATES, но НЕ в PTREE_PREDICATES
+        """ ;
+        dcterms:description "Группа индивидуальных свойств процесса для конкретной схемы" .
+
+    # ==========================================================================
+    # ТЕХНОЛОГИЧЕСКИЕ ОБЪЕКТЫ ДЛЯ ИСПОЛНИТЕЛЕЙ (EXECUTOR TECH OBJECTS)
+    # ==========================================================================
+
+    # --------------------------------------------------------------------------
+    # vad:ConceptExecutorPredicate - Общие свойства исполнителей (RTREE_PREDICATES)
+    # --------------------------------------------------------------------------
+
+    vad:ConceptExecutorPredicate
+        rdf:type vad:VadXPredicate ;
+        rdfs:label "ConceptExecutorPredicate" ;
+        vad:includePredicate rdf:type, rdfs:label, vad:hasParentObj ;
+        rdfs:comment """
+            Группа «Общие свойства исполнителя для всех схем процессов» (RTREE_PREDICATES).
+
+            Объект ConceptExecutorPredicate (класса Tech) включает предикаты,
+            которые используются для объектов типа TypeExecutor в vad:rtree:
+            - rdf:type - тип объекта (vad:Executor)
+            - rdfs:label - название исполнителя
+            - vad:hasParentObj - родительский элемент в иерархии (issue #278)
+
+            Это свойства концепта исполнителя, общие для всех схем.
+
+            Связь с JS-кодом: константа RTREE_PREDICATES
+        """ ;
+        dcterms:description "Группа общих свойств исполнителей для всех схем (RTREE_PREDICATES)" .
+
+    # ==========================================================================
+    # ТЕХНОЛОГИЧЕСКИЕ ОБЪЕКТЫ ДЛЯ ГРУПП ИСПОЛНИТЕЛЕЙ
+    # ==========================================================================
+
+    # --------------------------------------------------------------------------
+    # vad:ConceptExecutorGroupPredicate - Свойства группы исполнителей
+    # --------------------------------------------------------------------------
+
+    vad:ConceptExecutorGroupPredicate
+        rdf:type vad:VadXPredicate ;
+        rdfs:label "ConceptExecutorGroupPredicate" ;
+        vad:includePredicate rdf:type, rdfs:label, vad:includes ;
+        vad:autoGeneratedPredicate rdf:type, rdfs:label ;
+        rdfs:comment """
+            Группа «Свойства группы исполнителей».
+
+            Объект ConceptExecutorGroupPredicate (класса Tech) включает предикаты,
+            которые используются для объектов типа ExecutorGroup:
+            - rdf:type - тип объекта (vad:ExecutorGroup) - АВТОМАТИЧЕСКИ
+            - rdfs:label - название группы (генерируется автоматически) - АВТОМАТИЧЕСКИ
+            - vad:includes - включённые исполнители
+
+            Автоматически генерируемые предикаты:
+            - rdf:type - при создании ExecutorGroup
+            - rdfs:label - генерируется как "Группа исполнителей процесса {processLabel}"
+
+            Для пользователя доступен только предикат vad:includes для добавления
+            исполнителей в группу.
+
+            Хранятся в соответствующем VADProcessDia.
+        """ ;
+        dcterms:description "Группа свойств группы исполнителей" .
+
+    # ==========================================================================
+    # ТЕХНОЛОГИЧЕСКИЕ ОБЪЕКТЫ ДЛЯ TriG (TRIG TECH OBJECTS)
+    # ==========================================================================
+
+    # --------------------------------------------------------------------------
+    # vad:ConceptTriGPredicate - Свойства схемы процесса (VADProcessDia)
+    # --------------------------------------------------------------------------
+
+    vad:ConceptTriGPredicate
+        rdf:type vad:VadXPredicate ;
+        rdfs:label "ConceptTriGPredicate" ;
+        vad:includePredicate rdf:type, rdfs:label, vad:hasParentObj, vad:definesProcess ;
+        vad:autoGeneratedPredicate rdf:type, rdfs:label, vad:hasParentObj, vad:definesProcess ;
+        rdfs:comment """
+            Группа «Свойства схемы процесса» (VADProcessDia).
+
+            Объект ConceptTriGPredicate (класса Tech) включает предикаты,
+            которые используются для объектов типа VADProcessDia:
+            - rdf:type - тип объекта (vad:VADProcessDia) - АВТОМАТИЧЕСКИ
+            - rdfs:label - название схемы - АВТОМАТИЧЕСКИ
+            - vad:hasParentObj - родительский TriG - АВТОМАТИЧЕСКИ
+            - vad:definesProcess - связь с процессом - АВТОМАТИЧЕСКИ
+
+            Все предикаты для VADProcessDia автоматически генерируются при создании
+            нового TriG через кнопку "New TriG (VADProcessDia)".
+
+            Хранятся в соответствующем TriG (VADProcessDia).
+        """ ;
+        dcterms:description "Группа свойств схемы процесса (VADProcessDia)" .
+
+    # --------------------------------------------------------------------------
+    # vad:ConceptProcessTreePredicate - Свойства дерева процессов (ptree)
+    # --------------------------------------------------------------------------
+
+    vad:ConceptProcessTreePredicate
+        rdf:type vad:Tech ;
+        rdfs:label "ConceptProcessTreePredicate" ;
+        vad:includePredicate rdf:type, rdfs:label, vad:hasParentObj ;
+        vad:autoGeneratedPredicate rdf:type, rdfs:label, vad:hasParentObj ;
+        rdfs:comment """
+            Группа «Свойства дерева процессов» (ProcessTree).
+
+            Объект ConceptProcessTreePredicate (класса Tech) включает предикаты,
+            которые используются для единственного экземпляра vad:ptree:
+            - rdf:type - тип объекта (vad:ProcessTree)
+            - rdfs:label - название дерева
+            - vad:hasParentObj - родительский узел (vad:root)
+
+            Все предикаты автоматически установлены и не подлежат изменению.
+
+            Хранятся в vad:ptree (самоописание).
+        """ ;
+        dcterms:description "Группа свойств дерева процессов (ptree)" .
+
+    # --------------------------------------------------------------------------
+    # vad:ConceptExecutorTreePredicate - Свойства дерева исполнителей (rtree)
+    # --------------------------------------------------------------------------
+
+    vad:ConceptExecutorTreePredicate
+        rdf:type vad:Tech ;
+        rdfs:label "ConceptExecutorTreePredicate" ;
+        vad:includePredicate rdf:type, rdfs:label, vad:hasParentObj ;
+        vad:autoGeneratedPredicate rdf:type, rdfs:label, vad:hasParentObj ;
+        rdfs:comment """
+            Группа «Свойства дерева исполнителей» (ExecutorTree).
+
+            Объект ConceptExecutorTreePredicate (класса Tech) включает предикаты,
+            которые используются для единственного экземпляра vad:rtree:
+            - rdf:type - тип объекта (vad:ExecutorTree)
+            - rdfs:label - название дерева
+            - vad:hasParentObj - родительский узел (vad:root)
+
+            Все предикаты автоматически установлены и не подлежат изменению.
+
+            Хранятся в vad:rtree (самоописание).
+        """ ;
+        dcterms:description "Группа свойств дерева исполнителей (rtree)" .
+
+    # ==========================================================================
+    # СВЯЗЬ ТИПОВ С ТЕХНОЛОГИЧЕСКИМИ ОБЪЕКТАМИ (TYPE TO TECH MAPPING)
+    # ==========================================================================
+
+    vad:predicateGroupForType
+        rdf:type rdf:Property, owl:ObjectProperty ;
+        rdfs:label "predicateGroupForType" ;
+        rdfs:domain rdfs:Class ;
+        rdfs:range vad:Tech ;
+        rdfs:comment """
+            Связывает тип объекта с технологическим объектом, определяющим
+            группу предикатов для этого типа.
+
+            Пример:
+            vad:TypeProcess vad:predicateGroupForType vad:IndividProcessPredicate .
+
+            Позволяет автоматически определить группу предикатов для
+            выбранного Subject Type в окне Smart Design.
+        """ ;
+        dcterms:description "Связывает тип с его группой предикатов" .
+
+    vad:contextTriGType
+        rdf:type rdf:Property, owl:ObjectProperty ;
+        rdfs:label "contextTriGType" ;
+        rdfs:domain vad:Tech ;
+        rdfs:range rdfs:Class ;
+        rdfs:comment """
+            Указывает тип TriG-контекста, для которого применяется данный
+            технологический объект.
+
+            Значения:
+            - vad:ProcessTree - контекст vad:ptree
+            - vad:ExecutorTree - контекст vad:rtree
+            - vad:VADProcessDia - контекст схемы процесса
+
+            Пример:
+            vad:ConceptProcessPredicate vad:contextTriGType vad:ProcessTree .
+            vad:IndividProcessPredicate vad:contextTriGType vad:VADProcessDia .
+        """ ;
+        dcterms:description "Указывает тип TriG-контекста для технологического объекта" .
+
+    # Привязка технологических объектов к контекстам
+    vad:ConceptProcessPredicate vad:contextTriGType vad:ProcessTree .
+    vad:IndividProcessPredicate vad:contextTriGType vad:VADProcessDia .
+    vad:ConceptExecutorPredicate vad:contextTriGType vad:ExecutorTree .
+    vad:ConceptExecutorGroupPredicate vad:contextTriGType vad:VADProcessDia .
+    vad:ConceptTriGPredicate vad:contextTriGType vad:VADProcessDia .
+    vad:ConceptProcessTreePredicate vad:contextTriGType vad:ProcessTree .
+    vad:ConceptExecutorTreePredicate vad:contextTriGType vad:ExecutorTree .
+
+    # ==========================================================================
+    # ЭКЗЕМПЛЯРЫ ТЕХНОЛОГИЧЕСКИХ ДЕРЕВЬЕВ (TECHNOTREE INSTANCES)
+    # ==========================================================================
+
+    # --------------------------------------------------------------------------
+    # vad:techroot - Корневой узел технологического дерева
+    # --------------------------------------------------------------------------
+
+    vad:techroot
+        rdf:type vad:TechnoTree ;
+        rdfs:label "Корень Технологического Дерева" ;
+        # issue #264: vad:techroot не имеет hasParentObj (корень техно-дерева)
+        # ПРАВИЛО: только vad:root и vad:techroot могут иметь hasParentObj = null
+        rdfs:comment """
+            Корневой узел технологического дерева (techroot).
+
+            issue #264: Перенесён из vad-basic-ontology.ttl
+
+            Является родителем для:
+            - vad:techtree - дерево технологических данных из ontology
+
+            ПРАВИЛО ВАЛИДАЦИИ:
+            Только vad:root и vad:techroot могут иметь vad:hasParentObj = null.
+            Это правило может использоваться при валидации quadstore.
+
+            Деревья типа vad:TechnoTree не отображаются в treeview окна Publisher.
+        """ ;
+        dcterms:description "Корневой узел технологического дерева" .
+
+    # ==========================================================================
+    # issue #359: ПРАВИЛА REASONING ДЛЯ EXECUTORGROUP RDFS:LABEL
+    # ==========================================================================
+
+    vad:AutoExecutorGroupLabel
+        rdf:type vad:Auto ;
+        rdfs:label "AutoExecutorGroupLabel" ;
+        vad:generatesProperty rdfs:label ;
+        vad:generationRule """
+            rdfs:label для ExecutorGroup вычисляется автоматически через reasoning:
+            1. Получаем все исполнители через vad:includes
+            2. Агрегируем их rdfs:label через запятую
+            3. Результат: "Исполнитель1, Исполнитель2, ..."
+
+            SPARQL CONSTRUCT:
+            CONSTRUCT {
+                ?executorGroup rdfs:label ?aggregatedLabel .
+            }
+            WHERE {
+                ?executorGroup rdf:type vad:ExecutorGroup .
+                {
+                    SELECT ?executorGroup (GROUP_CONCAT(?label; separator=", ") AS ?aggregatedLabel)
+                    WHERE {
+                        ?executorGroup vad:includes ?executor .
+                        ?executor rdfs:label ?label .
+                    }
+                    GROUP BY ?executorGroup
+                }
+            }
+        """ ;
+        rdfs:comment """
+            issue #359: Автоматическое вычисление rdfs:label для ExecutorGroup.
+
+            Вместо хранения статического label, значение вычисляется динамически
+            через reasoning на основе rdfs:label всех исполнителей, входящих
+            в группу через предикат vad:includes.
+
+            Пример:
+            vad:eg_p1.1 vad:includes vad:r1, vad:r2, vad:r3 .
+            vad:r1 rdfs:label "Бухгалтерия" .
+            vad:r2 rdfs:label "Финансовый отдел" .
+            vad:r3 rdfs:label "Директор" .
+
+            Результат reasoning:
+            vad:eg_p1.1 rdfs:label "Бухгалтерия, Финансовый отдел, Директор" .
+        """ ;
+        dcterms:description "Автоматическое вычисление rdfs:label для ExecutorGroup через reasoning" .
+
+    # ==========================================================================
+    # МЕТОДЫ ОБЪЕКТОВ СХЕМЫ (OBJECT METHODS)
+    # ==========================================================================
+    # issue #336: Определение методов для типов объектов на схеме процесса
+    # ==========================================================================
+
+    # Класс для методов объектов
+    vad:ObjectMethod
+        rdf:type rdfs:Class, owl:Class ;
+        rdfs:subClassOf vad:Tech ;
+        rdfs:label "ObjectMethod" ;
+        rdfs:comment """
+            Класс ObjectMethod определяет методы (действия), которые можно выполнить
+            над объектами определённого типа на схеме процесса.
+
+            Каждый метод связывается с типом объекта через vad:methodForType.
+            При клике на метод в выпадающем списке вызывается соответствующая функция.
+        """ ;
+        dcterms:description "Класс для определения методов объектов на схеме" .
+
+    # Предикат для связи метода с типом объекта
+    vad:methodForType
+        rdf:type rdf:Property, owl:ObjectProperty ;
+        rdfs:label "methodForType" ;
+        rdfs:domain vad:ObjectMethod ;
+        rdfs:range rdfs:Class ;
+        rdfs:comment """
+            Связывает метод с типом объекта, для которого он доступен.
+            Например: vad:DeleteIndividProcess vad:methodForType vad:isSubprocessTrig .
+        """ ;
+        dcterms:description "Связь метода с типом объекта" .
+
+    # Предикат для идентификатора функции метода
+    vad:methodFunction
+        rdf:type rdf:Property, owl:DatatypeProperty ;
+        rdfs:label "methodFunction" ;
+        rdfs:domain vad:ObjectMethod ;
+        rdfs:range xsd:string ;
+        rdfs:comment """
+            Идентификатор JavaScript функции, которая вызывается при выполнении метода.
+            Например: "deleteIndividProcess" или "deleteIndividExecutor".
+        """ ;
+        dcterms:description "Идентификатор функции для вызова метода" .
+
+    # --------------------------------------------------------------------------
+    # Метод: Delete Individ Process
+    # --------------------------------------------------------------------------
+
+    vad:DeleteIndividProcess
+        rdf:type vad:ObjectMethod ;
+        rdfs:label "Delete Individ Process" ;
+        vad:methodForType vad:isSubprocessTrig ;
+        vad:methodFunction "deleteIndividProcess" ;
+        rdfs:comment """
+            Метод удаления индивида процесса из текущей схемы.
+            Удаляет все триплеты с данным процессом из текущего TriG.
+            Аналогичен функции 'Удалить индивид процесса' из окна Del Concept/Individ/Schema.
+        """ ;
+        dcterms:description "Удаляет индивид процесса из текущей схемы" .
+
+    # --------------------------------------------------------------------------
+    # Метод: Delete Individ Executor
+    # --------------------------------------------------------------------------
+
+    vad:DeleteIndividExecutor
+        rdf:type vad:ObjectMethod ;
+        rdfs:label "Delete Individ Executor" ;
+        vad:methodForType vad:ExecutorGroup ;
+        vad:methodFunction "deleteIndividExecutor" ;
+        rdfs:comment """
+            Метод удаления исполнителей из группы ExecutorGroup.
+            Удаляет все предикаты vad:includes для выбранной группы исполнителей
+            из текущего TriG.
+        """ ;
+        dcterms:description "Удаляет всех исполнителей из группы ExecutorGroup" .
+
+    # --------------------------------------------------------------------------
+    # issue #370: Метод: Add hasNext Dia
+    # --------------------------------------------------------------------------
+
+    vad:AddHasNextDia
+        rdf:type vad:ObjectMethod ;
+        rdfs:label "Add hasNext Dia" ;
+        vad:methodForType vad:isSubprocessTrig ;
+        vad:methodFunction "addHasNextDia" ;
+        rdfs:comment """
+            issue #370: Метод редактирования vad:hasNext для индивида процесса.
+            Открывает диалог, похожий на 'Создание нового Индивида' (Индивид процесса),
+            но с предзаполненными полями (Схема процесса, Концепт процесса) и возможностью
+            изменения значений vad:hasNext для выбранного индивида.
+
+            В чекбоксах уже отмечены существующие vad:hasNext,
+            пользователь может добавить или снять отметки.
+            Генерируется SPARQL-запрос для изменения значений vad:hasNext.
+        """ ;
+        dcterms:description "Редактирование vad:hasNext для индивида процесса" .
+
+    # --------------------------------------------------------------------------
+    # issue #386: Метод: Edit Label Concept Process
+    # --------------------------------------------------------------------------
+
+    vad:EditLabelConceptProcess
+        rdf:type vad:ObjectMethod ;
+        rdfs:label "Edit Label Concept Process" ;
+        vad:methodForType vad:isSubprocessTrig ;
+        vad:methodFunction "editLabelConceptProcess" ;
+        rdfs:comment """
+            issue #386: Метод редактирования rdfs:label для концепта процесса.
+
+            Алгоритм работы:
+            1. Открывается окно с id и label выбранного объекта. Поле label редактируемое.
+            2. При изменении значения label по кнопке «Создать запрос» создаётся
+               SPARQL-запрос на изменение label в vad:ptree.
+            3. Одновременно с изменением label у концепта, если у процесса есть схема
+               (наличие vad:hasTrig в ptree), у схемы процесса автоматически меняется
+               label согласно правилу: "Схема процесса {newLabel}".
+            4. По кнопке «Создать запрос» запрос (включая SPARQL на изменение label
+               у соответствующего TriG VADProcessDia) направляется в окно Result in SPARQL.
+        """ ;
+        dcterms:description "Редактирование rdfs:label для концепта процесса и связанной схемы" .
+
+    # --------------------------------------------------------------------------
+    # issue #404: Метод: New Executor Individ
+    # --------------------------------------------------------------------------
+
+    vad:NewExecutorIndivid
+        rdf:type vad:ObjectMethod ;
+        rdfs:label "New Executor Individ" ;
+        vad:methodForType vad:isSubprocessTrig ;
+        vad:methodFunction "newExecutorIndivid" ;
+        rdfs:comment """
+            issue #404: Метод создания нового индивида исполнителя для выбранного индивида процесса.
+
+            Алгоритм работы:
+            1. При выборе на схеме Индивида процесса в окне «Свойства объекта диаграммы»
+               по кнопке Метод доступен метод "New Executor Individ".
+            2. Открывается окно «Создание нового индивида» (New Individ) с предзаполненными полями:
+               - «Индивид процесса:» — URI выбранного индивида процесса
+               - «TriG (схема процесса):» — URI текущей схемы процесса
+            3. Далее операции в соответствии с штатной схемой (по кнопке Создать запрос New Individ)
+               передача запроса в Result in SPARQL.
+        """ ;
+        dcterms:description "Создание нового индивида исполнителя в ExecutorGroup индивида процесса" .
+
+    # ==========================================================================
+    # issue #386: МЕТОДЫ ДИАГРАММЫ (DIAGRAM METHODS)
+    # ==========================================================================
+    # Методы, доступные из кнопки "Методы" в заголовке окна Диаграмма
+    # ==========================================================================
+
+    # Класс для методов диаграммы
+    vad:DiagramMethod
+        rdf:type rdfs:Class, owl:Class ;
+        rdfs:subClassOf vad:Tech ;
+        rdfs:label "DiagramMethod" ;
+        rdfs:comment """
+            issue #386: Класс DiagramMethod определяет методы (действия), которые можно
+            выполнить над текущей открытой диаграммой (TriG).
+
+            Методы диаграммы доступны через кнопку "Методы" в заголовке окна "Диаграмма".
+        """ ;
+        dcterms:description "Класс для определения методов диаграммы" .
+
+    # --------------------------------------------------------------------------
+    # issue #386: Метод диаграммы: Del Dia
+    # --------------------------------------------------------------------------
+
+    vad:DelDia
+        rdf:type vad:DiagramMethod ;
+        rdfs:label "Del Dia" ;
+        vad:methodFunction "delDia" ;
+        rdfs:comment """
+            issue #386: Метод удаления текущей открытой схемы процесса (TriG).
+
+            По кнопке метода "Del Dia" вызывается окно "Удалить схему процесса"
+            (Del Concept/Individ/Schema) и в это окно подставляется открытая схема
+            (id TriG). Далее действия штатные - как по кнопке Del Concept/Individ/Schema
+            при выборе "Удалить схему процесса".
+        """ ;
+        dcterms:description "Удаление текущей открытой схемы процесса (TriG)" .
+
+    # --------------------------------------------------------------------------
+    # issue #404: Метод диаграммы: New Process Individ
+    # --------------------------------------------------------------------------
+
+    vad:NewProcessIndivid
+        rdf:type vad:DiagramMethod ;
+        rdfs:label "New Process Individ" ;
+        vad:methodFunction "newProcessIndivid" ;
+        rdfs:comment """
+            issue #404: Метод создания нового индивида процесса в текущей схеме.
+
+            По кнопке метода "New Process Individ" открывается окно "Создание нового индивида"
+            (New Individ), при этом в поле "TriG (схема процесса):" автоматически подставляется
+            значение текущей схемы процесса (откуда была нажата кнопка методы).
+            Далее операции в соответствии с штатной схемой (по кнопке Создать запрос New Individ)
+            передача запроса в Result in SPARQL.
+        """ ;
+        dcterms:description "Создание нового индивида процесса в текущей схеме" .
+
+}
+
+# ==============================================================================
+# КОНЕЦ ФАЙЛА vad-basic-ontology_tech_Appendix.trig
+# ==============================================================================
