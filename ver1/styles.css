@@ -1,0 +1,3424 @@
+        /* issue #232: Основные стили страницы */
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        h1 {
+            color: #333;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+        }
+
+        .description {
+            background-color: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .example-status {
+            margin-top: 10px;
+            padding: 8px;
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 4px;
+            color: #856404;
+            font-size: 14px;
+        }
+
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .rdf-input-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            flex-wrap: nowrap;
+        }
+
+        .rdf-input-header label {
+            margin-bottom: 0;
+            flex-shrink: 0;
+        }
+
+        /* issue #266: Dropdown should expand to fill available space */
+        .rdf-input-header select#trig-filter {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .rdf-input-header button {
+            margin-top: 0;
+            padding: 8px 16px;
+            font-size: 14px;
+        }
+
+        .clear-btn {
+            background-color: #dc3545;
+        }
+
+        .clear-btn:hover {
+            background-color: #c82333;
+        }
+
+        .save-as-btn {
+            background-color: #007bff;
+        }
+
+        .save-as-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .load-btn {
+            background-color: #28a745;
+        }
+
+        .load-btn:hover {
+            background-color: #1e7e34;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        textarea {
+            width: 100%;
+            height: 200px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 14px;
+            resize: vertical;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #4CAF50;
+            box-shadow: 0 0 5px rgba(76, 175, 80, 0.3);
+        }
+
+        .format-selectors {
+            display: flex;
+            gap: 20px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+
+        .form-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            background-color: white;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 15px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+
+        .result-container {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: none;
+        }
+
+        #output {
+            text-align: center;
+            display: inline-block;
+        }
+
+        #output svg {
+            height: auto;
+        }
+
+        .error {
+            color: #d32f2f;
+            background-color: #ffebee;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+
+        .validation-error {
+            color: #d32f2f;
+            background-color: #ffebee;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 10px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            white-space: pre-wrap;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #4CAF50;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .export-buttons {
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .export-buttons button {
+            margin: 5px;
+            background-color: #2196F3;
+        }
+
+        .export-buttons button:hover {
+            background-color: #1976D2;
+        }
+
+        .zoom-container {
+            position: relative;
+            overflow: auto;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: white;
+            min-height: 300px;
+            max-height: 70vh;
+        }
+
+        .zoom-content {
+            transform-origin: top left;
+            transition: transform 0.2s ease;
+        }
+
+        .zoom-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #f5f5f5;
+            border-radius: 4px;
+        }
+
+        .zoom-controls button {
+            padding: 8px 15px;
+            margin: 0;
+            font-size: 14px;
+            background-color: #607D8B;
+        }
+
+        .zoom-controls button:hover {
+            background-color: #455A64;
+        }
+
+        .zoom-controls span {
+            min-width: 60px;
+            text-align: center;
+            font-weight: bold;
+            color: #333;
+        }
+
+        a {
+            color: #1976D2;
+        }
+
+        .example-link {
+            color: #4CAF50;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        .example-link:hover {
+            color: #45a049;
+        }
+
+        .prefixes-panel {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .prefixes-panel h3 {
+            margin: 0 0 10px 0;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .prefixes-content {
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .prefix-line {
+            margin: 2px 0;
+        }
+
+        .prefix-name {
+            color: #6a1b9a;
+            font-weight: bold;
+        }
+
+        .prefix-url {
+            color: #1976D2;
+            text-decoration: none;
+        }
+
+        .prefix-url:hover {
+            text-decoration: underline;
+        }
+
+        .legend-panel {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .legend-panel h3 {
+            margin: 0 0 10px 0;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .legend-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .legend-section {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .legend-section h4 {
+            margin: 0 0 8px 0;
+            color: #555;
+            font-size: 13px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 5px 0;
+            font-size: 12px;
+        }
+
+        .legend-shape {
+            width: 30px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid;
+            font-size: 10px;
+        }
+
+        .legend-line {
+            width: 40px;
+            height: 3px;
+            display: inline-block;
+        }
+
+        .legend-label {
+            color: #333;
+        }
+
+        .properties-panel {
+            position: fixed;
+            right: 20px;
+            top: 100px;
+            width: 350px;
+            max-height: 70vh;
+            background-color: white;
+            border: 2px solid #4CAF50;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            z-index: 1000;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            resize: both;
+            min-width: 280px;
+            min-height: 200px;
+        }
+
+        .properties-panel.visible {
+            display: flex;
+        }
+
+        #properties-panels-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        #properties-panels-container .properties-panel {
+            pointer-events: auto;
+        }
+
+        .properties-header {
+            padding: 15px;
+            background-color: #4CAF50;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: move;
+            user-select: none;
+            border-radius: 6px 6px 0 0;
+        }
+
+        .properties-header-content {
+            flex: 1;
+            padding-right: 10px;
+        }
+
+        .properties-header-title {
+            font-size: 11px;
+            opacity: 0.85;
+            margin-bottom: 2px;
+        }
+
+        .properties-header h3 {
+            margin: 0;
+            font-size: 14px;
+            word-break: break-all;
+        }
+
+        .properties-close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 0 5px;
+            line-height: 1;
+            flex-shrink: 0;
+        }
+
+        .properties-close-btn:hover {
+            opacity: 0.8;
+        }
+
+        .properties-copy-btn {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.5);
+            color: white;
+            border-radius: 4px;
+            padding: 4px 8px;
+            cursor: pointer;
+            font-size: 11px;
+            flex-shrink: 0;
+            transition: background-color 0.2s;
+            margin-left: 8px;
+        }
+
+        .properties-copy-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .properties-copy-btn.copied {
+            background: rgba(255,255,255,0.4);
+        }
+
+        .properties-header-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .mode-selector {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 15px;
+            padding: 10px 15px;
+            background-color: #f0f0f0;
+            border-radius: 4px;
+        }
+
+        .mode-selector label {
+            margin: 0;
+            font-weight: normal;
+        }
+
+        .mode-selector select {
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .mode-description {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .sparql-panel {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .sparql-panel.visible {
+            display: block;
+        }
+
+        .sparql-panel h3 {
+            margin: 0 0 10px 0;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .sparql-query-textarea {
+            width: 100%;
+            height: 120px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 13px;
+            resize: vertical;
+            margin-bottom: 10px;
+        }
+
+        .sparql-query-textarea:focus {
+            outline: none;
+            border-color: #9C27B0;
+            box-shadow: 0 0 5px rgba(156, 39, 176, 0.3);
+        }
+
+        .sparql-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .sparql-buttons button {
+            background-color: #9C27B0;
+            margin-top: 0;
+        }
+
+        .sparql-buttons button:hover {
+            background-color: #7B1FA2;
+        }
+
+        .sparql-results {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            max-height: 400px;
+            overflow: auto;
+        }
+
+        .sparql-results h4 {
+            margin: 0 0 10px 0;
+            color: #333;
+            font-size: 13px;
+        }
+
+        .sparql-results-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+            font-family: 'Consolas', 'Monaco', monospace;
+        }
+
+        .sparql-results-table th {
+            background-color: #9C27B0;
+            color: white;
+            padding: 8px;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        .sparql-results-table td {
+            padding: 8px;
+            border-bottom: 1px solid #eee;
+            word-break: break-all;
+        }
+
+        .sparql-results-table tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .sparql-results-table .uri {
+            color: #1976D2;
+        }
+
+        .sparql-results-table .literal {
+            color: #6a1b9a;
+        }
+
+        .sparql-error {
+            color: #d32f2f;
+            background-color: #ffebee;
+            padding: 10px;
+            border-radius: 4px;
+        }
+
+        .sparql-loading {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+
+        .properties-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+        }
+
+        .property-item {
+            margin-bottom: 12px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+            border-left: 3px solid #4CAF50;
+        }
+
+        .property-predicate {
+            color: #1976D2;
+            font-weight: bold;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 13px;
+            margin-bottom: 5px;
+        }
+
+        .property-value {
+            color: #333;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 13px;
+            word-break: break-all;
+        }
+
+        .property-value.literal {
+            color: #6a1b9a;
+        }
+
+        .property-value.uri {
+            color: #1976D2;
+        }
+
+        .properties-empty {
+            color: #666;
+            font-style: italic;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .properties-type-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            border-radius: 3px;
+            font-size: 11px;
+            margin-top: 5px;
+        }
+
+        #output svg .node {
+            cursor: pointer;
+        }
+
+        #output svg .node:hover {
+            opacity: 0.8;
+        }
+
+        #output svg .node.selected polygon,
+        #output svg .node.selected ellipse,
+        #output svg .node.selected path {
+            stroke-width: 4px;
+            stroke: #FF5722;
+            filter: drop-shadow(0 0 8px #FF5722);
+        }
+
+        #vad-trig-output svg .node.selected polygon,
+        #vad-trig-output svg .node.selected ellipse,
+        #vad-trig-output svg .node.selected path {
+            stroke-width: 4px;
+            stroke: #FF5722;
+            filter: drop-shadow(0 0 8px #FF5722);
+        }
+
+        .filter-panel {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #fff8e1;
+            border: 1px solid #ffcc02;
+            border-radius: 8px;
+        }
+
+        .filter-panel h3 {
+            margin: 0 0 10px 0;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .filter-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .filter-controls button {
+            padding: 6px 12px;
+            font-size: 12px;
+            margin-top: 0;
+            background-color: #FFA000;
+        }
+
+        .filter-controls button:hover {
+            background-color: #FF8F00;
+        }
+
+        .filter-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .filter-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 10px;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 12px;
+            font-family: 'Consolas', 'Monaco', monospace;
+        }
+
+        .filter-item input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+
+        .filter-item label {
+            margin: 0;
+            font-weight: normal;
+            cursor: pointer;
+        }
+
+        .sparql-results-table tr.clickable {
+            cursor: pointer;
+        }
+
+        .sparql-results-table tr.clickable:hover {
+            background-color: #e3f2fd !important;
+        }
+
+        .sparql-results-table tr.highlighted {
+            background-color: #fff3e0 !important;
+            outline: 2px solid #FF5722;
+        }
+
+        /* ============================================================================
+           СТИЛИ ДЛЯ РЕЖИМА VAD TriG
+           ============================================================================ */
+
+        .vad-trig-container {
+            display: flex;
+            flex-direction: row;
+            gap: 20px;
+            margin-top: 20px;
+            align-items: stretch;
+        }
+
+        .vad-trig-left-panels {
+            width: 350px;
+            min-width: 280px;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            order: 1; /* Panels on the left */
+        }
+
+        .vad-trig-diagram-wrapper {
+            flex: 1;
+            min-width: 280px;
+            display: flex;
+            flex-direction: column;
+            order: 2; /* Diagram on the right */
+        }
+
+        .vad-trig-result {
+            flex: 1;
+        }
+
+        /* Стили для панели диаграммы */
+        .diagram-panel {
+            background-color: white;
+            border: 2px solid #FF9800;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .diagram-panel-header {
+            padding: 12px 15px;
+            background-color: #FF9800;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+            border-radius: 6px 6px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .diagram-header-text {
+            flex: 1;
+        }
+
+        /* issue #301: Navigation buttons for diagram history (back/forward) */
+        /* issue #303: Buttons resized ~3x smaller, cursor style fixed */
+        .diagram-nav-buttons {
+            display: flex;
+            gap: 3px;
+            margin-left: 12px;
+        }
+
+        .diagram-nav-btn {
+            width: 24px;
+            height: 21px;
+            padding: 0;
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            border-radius: 3px;
+            background-color: rgba(255, 255, 255, 0.35);
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            line-height: 1;
+        }
+
+        .diagram-nav-btn:hover:not(:disabled) {
+            background-color: rgba(255, 255, 255, 0.5);
+            border-color: rgba(255, 255, 255, 0.9);
+        }
+
+        .diagram-nav-btn:active:not(:disabled) {
+            background-color: rgba(255, 255, 255, 0.6);
+        }
+
+        .diagram-nav-btn:disabled {
+            opacity: 0.5;
+            cursor: default;
+        }
+
+        /* issue #370: Стиль для кнопки Обновить в заголовке Диаграммы */
+        .diagram-refresh-btn {
+            font-size: 16px;
+            font-weight: normal;
+        }
+
+        /* issue #376: Стиль для кнопки Домой в заголовке Диаграммы */
+        .diagram-home-btn {
+            font-size: 16px;
+            font-weight: normal;
+        }
+
+        .diagram-panel-content {
+            flex: 1;
+            overflow: auto;
+            padding: 10px;
+            min-height: 300px;
+        }
+
+        .vad-trig-zoom-container {
+            min-width: min-content;
+            min-height: min-content;
+        }
+
+        .vad-trig-zoom-controls {
+            margin-top: 10px;
+            border-radius: 0 0 6px 6px;
+        }
+
+        .trig-tree-panel {
+            background-color: white;
+            border: 2px solid #4CAF50;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            flex: 1;
+            max-height: 250px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .trig-tree-header {
+            padding: 12px 15px;
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+            border-radius: 6px 6px 0 0;
+        }
+
+        .trig-tree-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 3px;
+        }
+
+        .trig-tree-item {
+            padding: 0px 3px;
+            margin: 0;
+            cursor: pointer;
+            border-radius: 2px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 11px;
+            line-height: 1.15;
+            transition: background-color 0.2s;
+        }
+
+        .trig-tree-item:hover {
+            background-color: #e8f5e9;
+        }
+
+        .trig-tree-item.selected {
+            background-color: #c8e6c9;
+            border-left: 3px solid #4CAF50;
+            box-shadow: 0 0 8px rgba(76, 175, 80, 0.6);
+        }
+
+        .trig-tree-item.active {
+            background-color: #a5d6a7;
+            font-weight: bold;
+            box-shadow: 0 0 12px rgba(76, 175, 80, 0.8);
+        }
+
+        .trig-tree-children {
+            margin-left: 6px;
+            border-left: 1px dashed #ccc;
+            padding-left: 3px;
+        }
+
+        .trig-tree-toggle {
+            display: inline-block;
+            width: 12px;
+            text-align: center;
+            cursor: pointer;
+            margin-right: 3px;
+            color: #666;
+            font-size: 10px;
+        }
+
+        .trig-tree-toggle:hover {
+            color: #4CAF50;
+        }
+
+        .trig-tree-label {
+            color: #333;
+        }
+
+        .trig-tree-id {
+            color: #888;
+            font-size: 10px;
+            margin-left: 3px;
+        }
+
+        /* Стили для "Состав объектов" */
+        .object-composition-header {
+            background-color: #fff3e0;
+            border-left: 3px solid #FF9800;
+        }
+
+        .object-composition-header:hover {
+            background-color: #ffe0b2;
+        }
+
+        .object-composition-label {
+            color: #E65100;
+            font-weight: bold;
+        }
+
+        .object-composition-toggle {
+            color: #FF9800;
+        }
+
+        .process-item {
+            background-color: #f5f5f5;
+            margin-left: 10px;
+        }
+
+        .process-item:hover {
+            background-color: #e8f5e9;
+            border-left: 3px solid #4CAF50;
+        }
+
+        .process-item.process-selected {
+            background-color: #c8e6c9;
+            border-left: 3px solid #2E7D32;
+            font-weight: bold;
+        }
+
+        .process-icon {
+            color: #4CAF50;
+            margin-right: 5px;
+        }
+
+        /* Стили для подсветки процесса на диаграмме */
+        #vad-trig-output .node.process-highlighted polygon,
+        #vad-trig-output .node.process-highlighted path {
+            stroke: #FF5722 !important;
+            stroke-width: 4px !important;
+            filter: drop-shadow(0 0 8px #FF5722);
+        }
+
+        .trig-properties-panel {
+            background-color: white;
+            border: 2px solid #2196F3;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            flex: 1;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .trig-properties-header {
+            padding: 12px 15px;
+            background-color: #2196F3;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+            border-radius: 6px 6px 0 0;
+        }
+
+        .trig-properties-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 5px;
+        }
+
+        .trig-property-item {
+            margin-bottom: 4px;
+            padding: 4px 6px;
+            background-color: #f9f9f9;
+            border-radius: 3px;
+            border-left: 2px solid #2196F3;
+        }
+
+        .trig-property-predicate {
+            color: #1976D2;
+            font-weight: bold;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 11px;
+            margin-bottom: 1px;
+        }
+
+        .trig-property-value {
+            color: #333;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 11px;
+            word-break: break-all;
+        }
+
+        .trig-property-value.literal {
+            color: #6a1b9a;
+        }
+
+        .trig-property-value.uri {
+            color: #1976D2;
+        }
+
+        .trig-properties-empty {
+            color: #666;
+            font-style: italic;
+            text-align: center;
+            padding: 10px;
+            font-size: 11px;
+        }
+
+        .trig-error {
+            color: #d32f2f;
+            background-color: #ffebee;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 10px 0;
+            font-family: 'Consolas', 'Monaco', monospace;
+            white-space: pre-wrap;
+        }
+
+        .trig-property-value-container {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .trig-property-value-container .trig-property-value {
+            flex: 1;
+        }
+
+        .copy-id-btn {
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 4px 8px;
+            cursor: pointer;
+            font-size: 11px;
+            flex-shrink: 0;
+            transition: background-color 0.2s;
+        }
+
+        .copy-id-btn:hover {
+            background-color: #1976D2;
+        }
+
+        .copy-id-btn.copied {
+            background-color: #4CAF50;
+        }
+
+        /* issue #336: Стили для кнопки Методы и выпадающего списка */
+        .methods-btn {
+            background-color: #FF9800;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 4px 8px;
+            cursor: pointer;
+            font-size: 11px;
+            flex-shrink: 0;
+            transition: background-color 0.2s;
+            margin-left: 4px;
+            position: relative;
+        }
+
+        .methods-btn:hover {
+            background-color: #F57C00;
+        }
+
+        .methods-btn:disabled {
+            background-color: #BDBDBD;
+            cursor: not-allowed;
+        }
+
+        .methods-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            min-width: 180px;
+            z-index: 1100;
+            display: none;
+        }
+
+        .methods-dropdown.visible {
+            display: block;
+        }
+
+        .methods-dropdown-item {
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 12px;
+            border-bottom: 1px solid #eee;
+            transition: background-color 0.15s;
+        }
+
+        .methods-dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .methods-dropdown-item:hover {
+            background-color: #FFF3E0;
+        }
+
+        .methods-dropdown-empty {
+            padding: 8px 12px;
+            color: #999;
+            font-size: 12px;
+            font-style: italic;
+        }
+
+        /* Контейнер для кнопок URI */
+        .trig-property-buttons {
+            display: flex;
+            gap: 4px;
+            flex-shrink: 0;
+        }
+
+        /* Стили для разделителя и виртуальных свойств */
+        .trig-property-separator {
+            display: flex;
+            align-items: center;
+            margin: 15px 0 10px 0;
+            gap: 10px;
+        }
+
+        .trig-property-separator .separator-line {
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(to right, transparent, #9C27B0, transparent);
+        }
+
+        .trig-property-separator .separator-text {
+            font-size: 11px;
+            color: #9C27B0;
+            font-weight: bold;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .trig-property-item.virtual-property {
+            background-color: #F3E5F5;
+            border-left: 3px solid #9C27B0;
+            margin-left: -10px;
+            padding-left: 10px;
+        }
+
+        .trig-property-value.virtual {
+            color: #7B1FA2;
+            font-style: italic;
+        }
+
+        /* Стили для секций свойств */
+        .trig-property-section {
+            margin-bottom: 5px;
+        }
+
+        .trig-property-section.concept-section {
+            background-color: #E3F2FD;
+            border-left: 3px solid #2196F3;
+            margin-left: -10px;
+            padding-left: 10px;
+            padding-top: 5px;
+            padding-bottom: 5px;
+        }
+
+        .trig-property-item.concept-property {
+            background-color: transparent;
+        }
+
+        /* ============================================================================
+           СТИЛИ ДЛЯ РЕЖИМА SPARQL SMART DESIGN
+           ============================================================================ */
+
+        .smart-design-container {
+            margin-top: 20px;
+            display: none;
+        }
+
+        .smart-design-container.visible {
+            display: block;
+        }
+
+        /* Issue #221 Fix #3: Уменьшена высота панели Smart Design и отступы */
+        .smart-design-panel {
+            padding: 10px 15px;
+            background-color: #e3f2fd;
+            border: 1px solid #2196F3;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        /* Issue #217: Заголовок Smart Design с кнопками в правом верхнем углу */
+        /* Issue #221 Fix #3: Минимальный отступ между заголовком и верхней рамкой */
+        .smart-design-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            margin-top: 0;
+        }
+
+        .smart-design-panel h3 {
+            margin: 0;
+            color: #1565C0;
+            font-size: 14px;
+        }
+
+        .smart-design-header-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        /* Issue #221 Fix #3: Кнопки New Concept, New TriG, Del Concept\Individ
+           теперь имеют такую же высоту как "Создать SPARQL" и "Создать SPARQL (prefix)" */
+        .smart-design-header-buttons button {
+            padding: 8px 16px;
+            font-size: 13px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            color: white;
+        }
+
+        .smart-design-trig-row {
+            margin-bottom: 15px;
+        }
+
+        .smart-design-field-trig {
+            max-width: 400px;
+        }
+
+        .smart-design-fields {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .smart-design-field {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .smart-design-field label {
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #1565C0;
+            font-size: 13px;
+        }
+
+        .smart-design-field select {
+            padding: 8px;
+            border: 1px solid #90CAF9;
+            border-radius: 4px;
+            font-size: 13px;
+            background-color: white;
+        }
+
+        .smart-design-field select:focus {
+            outline: none;
+            border-color: #2196F3;
+            box-shadow: 0 0 5px rgba(33, 150, 243, 0.3);
+        }
+
+        .smart-design-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .smart-design-buttons button {
+            background-color: #2196F3;
+            margin-top: 0;
+            padding: 8px 16px;
+            font-size: 13px;
+        }
+
+        .smart-design-buttons button:hover {
+            background-color: #1976D2;
+        }
+
+        .smart-design-buttons button.delete-btn {
+            background-color: #f44336;
+        }
+
+        .smart-design-buttons button.delete-btn:hover {
+            background-color: #d32f2f;
+        }
+
+        .smart-design-buttons button.clear-btn {
+            background-color: #FF9800;
+        }
+
+        .smart-design-buttons button.clear-btn:hover {
+            background-color: #F57C00;
+        }
+
+        .smart-design-buttons button.apply-btn {
+            background-color: #4CAF50;
+        }
+
+        .smart-design-buttons button.apply-btn:hover {
+            background-color: #388E3C;
+        }
+
+        .result-sparql-panel {
+            padding: 15px;
+            background-color: #fff3e0;
+            border: 1px solid #FF9800;
+            border-radius: 8px;
+        }
+
+        .result-sparql-panel h3 {
+            margin: 0 0 10px 0;
+            color: #E65100;
+            font-size: 14px;
+        }
+
+        .result-sparql-textarea {
+            width: 100%;
+            height: 120px;
+            padding: 10px;
+            border: 1px solid #FFCC80;
+            border-radius: 4px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 13px;
+            resize: vertical;
+            background-color: white;
+        }
+
+        .result-sparql-textarea:focus {
+            outline: none;
+            border-color: #FF9800;
+            box-shadow: 0 0 5px rgba(255, 152, 0, 0.3);
+        }
+
+        .smart-design-message {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+
+        .smart-design-message.error {
+            background-color: #ffebee;
+            color: #d32f2f;
+            border: 1px solid #ef9a9a;
+        }
+
+        .smart-design-message.success {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            border: 1px solid #a5d6a7;
+        }
+
+        .smart-design-message.info {
+            background-color: #e3f2fd;
+            color: #1565C0;
+            border: 1px solid #90CAF9;
+        }
+
+        /* Стили для кнопки "New TriG" */
+        .new-trig-btn {
+            background-color: #FF9800 !important;
+            margin-right: 10px;
+        }
+
+        .new-trig-btn:hover {
+            background-color: #F57C00 !important;
+        }
+
+        /* Стили для модального окна New TriG */
+        .new-trig-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        /* issue #293: Modal positioned higher and draggable */
+        .new-trig-modal-content {
+            background-color: white;
+            position: absolute;
+            top: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 20px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+            max-height: calc(100vh - 100px);
+            overflow-y: auto;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        /* issue #293: Header is draggable */
+        .new-trig-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #FF9800;
+            cursor: move;
+            user-select: none;
+        }
+
+        .new-trig-modal-header h3 {
+            margin: 0;
+            color: #333;
+        }
+
+        .new-trig-modal-close {
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #666;
+            padding: 0;
+            line-height: 1;
+        }
+
+        .new-trig-modal-close:hover {
+            color: #333;
+        }
+
+        .new-trig-modal-body {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .new-trig-field {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .new-trig-field label {
+            font-weight: bold;
+            color: #555;
+            font-size: 14px;
+        }
+
+        .new-trig-field input,
+        .new-trig-field select {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .new-trig-field input:focus,
+        .new-trig-field select:focus {
+            outline: none;
+            border-color: #FF9800;
+            box-shadow: 0 0 5px rgba(255, 152, 0, 0.3);
+        }
+
+        .new-trig-modal-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+
+        .new-trig-modal-buttons button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 0;
+        }
+
+        .new-trig-cancel-btn {
+            background-color: #9e9e9e;
+            color: white;
+        }
+
+        .new-trig-cancel-btn:hover {
+            background-color: #757575;
+        }
+
+        .new-trig-create-btn {
+            background-color: #FF9800;
+            color: white;
+        }
+
+        .new-trig-create-btn:hover {
+            background-color: #F57C00;
+        }
+
+        /* issue #291: Кнопка "Промежуточный SPARQL" для New TriG */
+        .new-trig-sparql-btn {
+            background-color: #607D8B;
+            color: white;
+        }
+
+        .new-trig-sparql-btn:hover {
+            background-color: #455A64;
+        }
+
+        /* issue #291: Сообщения для New TriG (унификация с New Concept) */
+        .new-trig-message {
+            padding: 10px 15px;
+            border-radius: 4px;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        .new-trig-message.success {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            border: 1px solid #a5d6a7;
+        }
+
+        .new-trig-message.error {
+            background-color: #ffebee;
+            color: #c62828;
+            border: 1px solid #ef9a9a;
+        }
+
+        .new-trig-message.warning {
+            background-color: #fff3e0;
+            color: #e65100;
+            border: 1px solid #ffcc80;
+        }
+
+        /* issue #291: Промежуточный SPARQL для New TriG */
+        #new-trig-intermediate-sparql {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #f5f5f5;
+            border-radius: 6px;
+            border: 1px solid #e0e0e0;
+        }
+
+        /* issue #291: Стиль для недоступных (disabled) опций в select */
+        .new-trig-field select option.disabled-option {
+            color: #9e9e9e;
+            background-color: #f5f5f5;
+        }
+
+        /* ============================================================================= */
+        /* Стили для модального окна New Concept */
+        /* ============================================================================= */
+
+        .new-concept-btn {
+            background-color: #7B1FA2 !important;
+            color: white !important;
+        }
+
+        .new-concept-btn:hover {
+            background-color: #6A1B9A !important;
+        }
+
+        .new-concept-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        /* issue #293: Modal positioned higher and draggable */
+        .new-concept-modal-content {
+            background-color: white;
+            position: absolute;
+            top: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 20px;
+            border-radius: 8px;
+            width: 95%;
+            max-width: 700px;
+            max-height: calc(100vh - 100px);
+            overflow-y: auto;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        /* issue #293: Header is draggable */
+        .new-concept-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #7B1FA2;
+            cursor: move;
+            user-select: none;
+        }
+
+        .new-concept-modal-header h3 {
+            margin: 0;
+            color: #333;
+        }
+
+        .new-concept-modal-close {
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #666;
+            padding: 0;
+            line-height: 1;
+        }
+
+        .new-concept-modal-close:hover {
+            color: #333;
+        }
+
+        /* issue #268: Контейнер для кнопок в заголовке модального окна New Concept */
+        .new-concept-modal-header-buttons {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* issue #268: Стиль кнопки Help в модальном окне New Concept */
+        .new-concept-help-btn {
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 6px 12px;
+            font-size: 12px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .new-concept-help-btn:hover {
+            background-color: #1976D2;
+        }
+
+        .new-concept-modal-body {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .new-concept-field {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .new-concept-field label {
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .new-concept-field select,
+        .new-concept-field input,
+        .new-concept-field textarea {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .new-concept-field input:focus,
+        .new-concept-field select:focus,
+        .new-concept-field textarea:focus {
+            outline: none;
+            border-color: #7B1FA2;
+            box-shadow: 0 0 5px rgba(123, 31, 162, 0.3);
+        }
+
+        .new-concept-field input:disabled,
+        .new-concept-field select:disabled,
+        .new-concept-field textarea:disabled {
+            background-color: #f5f5f5;
+            cursor: not-allowed;
+            color: #666;
+        }
+
+        .new-concept-field .field-hint {
+            font-size: 12px;
+            color: #888;
+            font-style: italic;
+        }
+
+        .new-concept-hint {
+            color: #666;
+            font-style: italic;
+            padding: 20px;
+            text-align: center;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+        }
+
+        /* Стили для поля ID с режимом генерации */
+        .new-concept-field-id {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .new-concept-id-options {
+            display: flex;
+            gap: 20px;
+            margin: 10px 0;
+        }
+
+        .new-concept-radio {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: normal !important;
+            cursor: pointer;
+        }
+
+        .new-concept-radio input[type="radio"] {
+            width: auto;
+            margin: 0;
+        }
+
+        /* Стили для автоматических полей */
+        .new-concept-field-auto {
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 4px;
+            border-left: 3px solid #9e9e9e;
+        }
+
+        .new-concept-field-auto label {
+            color: #666;
+        }
+
+        .auto-badge {
+            background-color: #9e9e9e;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: normal;
+            margin-left: 5px;
+        }
+
+        /* Стили для полей только для чтения */
+        .new-concept-field-readonly {
+            background-color: #fff8e1;
+            padding: 10px;
+            border-radius: 4px;
+            border-left: 3px solid #FFC107;
+        }
+
+        .readonly-badge {
+            background-color: #FFC107;
+            color: #333;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: normal;
+            margin-left: 5px;
+        }
+
+        /* Промежуточный SPARQL */
+        #new-concept-intermediate-sparql {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #f5f5f5;
+            border-radius: 6px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .intermediate-sparql-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .intermediate-sparql-header label {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .toggle-sparql-btn {
+            padding: 5px 10px;
+            font-size: 12px;
+            background-color: #9e9e9e;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .toggle-sparql-btn:hover {
+            background-color: #757575;
+        }
+
+        .intermediate-sparql-textarea {
+            width: 100%;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 12px;
+            background-color: #263238;
+            color: #aed581;
+            border: none;
+            border-radius: 4px;
+            padding: 10px;
+        }
+
+        /* Сообщения */
+        .new-concept-message {
+            padding: 10px 15px;
+            border-radius: 4px;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        .new-concept-message.success {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            border: 1px solid #a5d6a7;
+        }
+
+        .new-concept-message.error {
+            background-color: #ffebee;
+            color: #c62828;
+            border: 1px solid #ef9a9a;
+        }
+
+        .new-concept-message.warning {
+            background-color: #fff3e0;
+            color: #e65100;
+            border: 1px solid #ffcc80;
+        }
+
+        /* Кнопки модального окна */
+        .new-concept-modal-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+            flex-wrap: wrap;
+        }
+
+        .new-concept-modal-buttons button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 0;
+        }
+
+        .new-concept-cancel-btn {
+            background-color: #9e9e9e;
+            color: white;
+        }
+
+        .new-concept-cancel-btn:hover {
+            background-color: #757575;
+        }
+
+        .new-concept-sparql-btn {
+            background-color: #607D8B;
+            color: white;
+        }
+
+        .new-concept-sparql-btn:hover {
+            background-color: #455A64;
+        }
+
+        .new-concept-create-btn {
+            background-color: #7B1FA2;
+            color: white;
+        }
+
+        .new-concept-create-btn:hover {
+            background-color: #6A1B9A;
+        }
+
+        /* ============================================================================= */
+        /* Стили для модального окна Del Concept\Individ */
+        /* ============================================================================= */
+
+        .del-concept-btn {
+            background-color: #f44336 !important;
+            color: white !important;
+        }
+
+        .del-concept-btn:hover {
+            background-color: #d32f2f !important;
+        }
+
+        .del-concept-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        /* issue #293: Modal positioned higher and draggable */
+        .del-concept-modal-content {
+            background-color: white;
+            position: absolute;
+            top: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 20px;
+            border-radius: 8px;
+            width: 95%;
+            max-width: 700px;
+            max-height: calc(100vh - 100px);
+            overflow-y: auto;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        /* issue #293: Header is draggable */
+        .del-concept-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f44336;
+            cursor: move;
+            user-select: none;
+        }
+
+        .del-concept-modal-header h3 {
+            margin: 0;
+            color: #333;
+        }
+
+        .del-concept-modal-close {
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #666;
+            padding: 0;
+            line-height: 1;
+        }
+
+        .del-concept-modal-close:hover {
+            color: #333;
+        }
+
+        .del-concept-modal-body {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .del-concept-field {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .del-concept-field label {
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .del-concept-field select,
+        .del-concept-field input,
+        .del-concept-field textarea {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .del-concept-field input:focus,
+        .del-concept-field select:focus,
+        .del-concept-field textarea:focus {
+            outline: none;
+            border-color: #f44336;
+            box-shadow: 0 0 5px rgba(244, 67, 54, 0.3);
+        }
+
+        .del-concept-hint {
+            color: #666;
+            font-style: italic;
+            padding: 20px;
+            text-align: center;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+        }
+
+        /* Сообщения */
+        .del-concept-message {
+            padding: 10px 15px;
+            border-radius: 4px;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        .del-concept-message.success {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            border: 1px solid #a5d6a7;
+        }
+
+        .del-concept-message.error {
+            background-color: #ffebee;
+            color: #c62828;
+            border: 1px solid #ef9a9a;
+        }
+
+        .del-concept-message.warning {
+            background-color: #fff3e0;
+            color: #e65100;
+            border: 1px solid #ffcc80;
+        }
+
+        /* Результаты проверки */
+        .del-concept-errors {
+            background-color: #ffebee;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid #ef9a9a;
+        }
+
+        .del-concept-errors h4 {
+            margin: 0 0 10px 0;
+            color: #c62828;
+        }
+
+        .del-concept-error-item {
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #ef9a9a;
+        }
+
+        .del-concept-error-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .del-concept-error-item .error-message {
+            margin: 0 0 5px 0;
+            color: #c62828;
+            font-weight: 500;
+        }
+
+        .del-concept-error-item .error-items {
+            margin: 5px 0 0 20px;
+            padding: 0;
+            color: #666;
+        }
+
+        .del-concept-error-item .error-items li {
+            margin: 2px 0;
+        }
+
+        .del-concept-success {
+            background-color: #e8f5e9;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid #a5d6a7;
+            color: #2e7d32;
+            text-align: center;
+        }
+
+        /* Найденные индивиды */
+        .del-concept-individuals {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .del-concept-individuals h4 {
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+
+        .del-concept-individuals .no-individuals {
+            color: #666;
+            font-style: italic;
+            text-align: center;
+        }
+
+        .del-concept-individuals .individuals-list {
+            margin: 0;
+            padding: 0 0 0 20px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .del-concept-individuals .individuals-list li {
+            margin: 5px 0;
+            padding: 5px 0;
+            border-bottom: 1px dashed #ddd;
+        }
+
+        .del-concept-individuals .individuals-list li:last-child {
+            border-bottom: none;
+        }
+
+        .del-concept-individuals .individ-label {
+            font-weight: 500;
+            color: #333;
+        }
+
+        .del-concept-individuals .individ-trig {
+            color: #666;
+            font-size: 12px;
+        }
+
+        /* Кнопки модального окна */
+        .del-concept-modal-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+            flex-wrap: wrap;
+        }
+
+        .del-concept-modal-buttons button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 0;
+        }
+
+        .del-concept-cancel-btn {
+            background-color: #9e9e9e;
+            color: white;
+        }
+
+        .del-concept-cancel-btn:hover {
+            background-color: #757575;
+        }
+
+        .del-concept-sparql-btn {
+            background-color: #607D8B;
+            color: white;
+        }
+
+        .del-concept-sparql-btn:hover {
+            background-color: #455A64;
+        }
+
+        .del-concept-show-btn {
+            background-color: #2196F3;
+            color: white;
+        }
+
+        .del-concept-show-btn:hover {
+            background-color: #1976D2;
+        }
+
+        .del-concept-delete-individs-btn {
+            background-color: #FF9800;
+            color: white;
+        }
+
+        .del-concept-delete-individs-btn:hover {
+            background-color: #F57C00;
+        }
+
+        .del-concept-create-btn {
+            background-color: #f44336;
+            color: white;
+        }
+
+        .del-concept-create-btn:hover {
+            background-color: #d32f2f;
+        }
+
+        .del-concept-create-btn:disabled {
+            background-color: #bdbdbd;
+            cursor: not-allowed;
+        }
+
+        /* ============================================================================= */
+
+        /* Стили для кнопки "Показать в отдельном окне" */
+        .show-in-window-btn {
+            background-color: #2196F3;
+            padding: 8px 15px !important;
+            font-size: 13px !important;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+
+        .show-in-window-btn:hover {
+            background-color: #1976D2;
+        }
+
+        /* Стили для кнопки "Virtual TriG" - issue #328: унифицированный цвет */
+        .virtual-rdf-btn {
+            background-color: #0288D1;
+            padding: 8px 15px !important;
+            font-size: 13px !important;
+            margin-left: 5px;
+            vertical-align: middle;
+        }
+
+        .virtual-rdf-btn:hover {
+            background-color: #0277BD;
+        }
+
+        /* issue #266: Removed duplicate rdf-input-header styles - see main definition above */
+
+        @media (max-width: 800px) {
+            .smart-design-fields {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 500px) {
+            .smart-design-fields {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Copy-to-clipboard button styles for Smart Design fields */
+        .smart-design-field-wrapper {
+            position: relative;
+            display: flex;
+            align-items: stretch;
+        }
+
+        .smart-design-field-wrapper select {
+            flex: 1;
+            border-radius: 4px 0 0 4px;
+        }
+
+        .copy-to-clipboard-btn {
+            padding: 8px 10px;
+            border: 1px solid #90CAF9;
+            border-left: none;
+            border-radius: 0 4px 4px 0;
+            background-color: #E3F2FD;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.2s;
+        }
+
+        .copy-to-clipboard-btn:hover {
+            background-color: #BBDEFB;
+        }
+
+        .copy-to-clipboard-btn:active {
+            background-color: #90CAF9;
+        }
+
+        .copy-to-clipboard-btn.copied {
+            background-color: #C8E6C9;
+        }
+
+        /* Field hint styles */
+        .field-hint {
+            display: block;
+            margin-top: 4px;
+            font-size: 11px;
+            color: #666;
+            font-style: italic;
+        }
+
+        /* Disabled option styles in select */
+        select option:disabled {
+            color: #999;
+            font-style: italic;
+        }
+
+        /* Auto-generated predicate indicator */
+        .auto-generated-indicator {
+            color: #999;
+            font-style: italic;
+        }
+
+        /* issue #236, issue #239: Стили для механизма свертывания/развертывания окон */
+        .window-section {
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .window-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            background-color: #f5f5f5;
+            border-bottom: 1px solid #ddd;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .window-header:hover {
+            background-color: #e8e8e8;
+        }
+
+        .window-header h3 {
+            margin: 0;
+            font-size: 14px;
+            color: #333;
+            flex: 1;
+        }
+
+        /* issue #239: Переключатель в правом верхнем углу, на одном уровне с названием */
+        .window-toggle {
+            font-size: 14px;
+            color: #555;
+            transition: transform 0.2s;
+            cursor: pointer;
+            padding: 2px 6px;
+            border-radius: 3px;
+            margin-left: 8px;
+            flex-shrink: 0;
+        }
+
+        .window-toggle:hover {
+            background-color: #ddd;
+            color: #333;
+        }
+
+        .window-toggle.collapsed {
+            transform: rotate(-90deg);
+        }
+
+        .window-content {
+            padding: 0;
+            transition: max-height 0.3s ease;
+            overflow: hidden;
+        }
+
+        .window-content.collapsed {
+            display: none;
+        }
+
+        /* Стили для модального окна результатов тестирования */
+        .test-result-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .test-result-modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 700px;
+            max-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        .test-result-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #4CAF50;
+        }
+
+        .test-result-modal-header h3 {
+            margin: 0;
+            color: #333;
+        }
+
+        .test-result-modal-header.error {
+            border-bottom-color: #d32f2f;
+        }
+
+        .test-result-modal-header.error h3 {
+            color: #d32f2f;
+        }
+
+        .test-result-modal-close {
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #666;
+            padding: 0;
+            line-height: 1;
+        }
+
+        .test-result-modal-close:hover {
+            color: #333;
+        }
+
+        .test-result-modal-body {
+            flex: 1;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .test-result-textarea {
+            width: 100%;
+            flex: 1;
+            min-height: 300px;
+            max-height: 50vh;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 13px;
+            resize: vertical;
+            background-color: #f9f9f9;
+            white-space: pre-wrap;
+            overflow-y: auto;
+        }
+
+        .test-result-textarea:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+
+        .test-result-modal-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+
+        .test-result-modal-buttons button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 0;
+        }
+
+        .test-result-copy-btn {
+            background-color: #2196F3;
+            color: white;
+        }
+
+        .test-result-copy-btn:hover {
+            background-color: #1976D2;
+        }
+
+        .test-result-copy-btn.copied {
+            background-color: #4CAF50;
+        }
+
+        .test-result-close-btn {
+            background-color: #9e9e9e;
+            color: white;
+        }
+
+        .test-result-close-btn:hover {
+            background-color: #757575;
+        }
+
+        /* ============================================================================= */
+        /* issue #309: Стили для кнопки и модального окна New Individ                    */
+        /* ============================================================================= */
+
+        .new-individ-btn {
+            background-color: #00897B !important;
+            color: white !important;
+        }
+
+        .new-individ-btn:hover {
+            background-color: #00796B !important;
+        }
+
+        .new-individ-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .new-individ-modal-content {
+            position: absolute;
+            background-color: white;
+            padding: 0;
+            border-radius: 8px;
+            width: 550px;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            top: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .new-individ-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background-color: #00897B;
+            color: white;
+            border-radius: 8px 8px 0 0;
+            cursor: move;
+        }
+
+        .new-individ-modal-header h3 {
+            margin: 0;
+            font-size: 16px;
+        }
+
+        .new-individ-modal-header-buttons {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .new-individ-help-btn {
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 6px 12px;
+            font-size: 12px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .new-individ-help-btn:hover {
+            background-color: #1976D2;
+        }
+
+        .new-individ-modal-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 0 5px;
+        }
+
+        .new-individ-modal-body {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding: 20px;
+        }
+
+        .new-individ-field {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .new-individ-field label {
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .new-individ-field select {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .new-individ-hint {
+            color: #666;
+            font-style: italic;
+        }
+
+        .new-individ-message {
+            padding: 10px 20px;
+            margin: 0;
+            font-size: 13px;
+        }
+
+        .new-individ-message.success {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .new-individ-message.error {
+            background-color: #ffebee;
+            color: #c62828;
+        }
+
+        .new-individ-modal-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            padding: 15px 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .new-individ-modal-buttons button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .new-individ-cancel-btn {
+            background-color: #9e9e9e;
+            color: white;
+        }
+
+        .new-individ-cancel-btn:hover {
+            background-color: #757575;
+        }
+
+        .new-individ-sparql-btn {
+            background-color: #ff9800;
+            color: white;
+        }
+
+        .new-individ-sparql-btn:hover {
+            background-color: #f57c00;
+        }
+
+        .new-individ-create-btn {
+            background-color: #00897B;
+            color: white;
+        }
+
+        .new-individ-create-btn:hover {
+            background-color: #00796B;
+        }
+
+        /* issue #313: Стили для переключателя режима hasNext */
+        .new-individ-hasnext-mode-options {
+            display: flex;
+            gap: 20px;
+            margin: 10px 0;
+        }
+
+        /* issue #309: Стили для checkbox-контейнера hasNext */
+        .new-individ-checkbox-container {
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 8px;
+        }
+
+        .new-individ-checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 0;
+        }
+
+        .new-individ-checkbox-item input[type="checkbox"] {
+            margin: 0;
+        }
+
+        .new-individ-checkbox-item label {
+            font-weight: normal;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .new-individ-checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: normal;
+            font-size: 13px;
+            cursor: pointer;
+            padding: 4px 0;
+        }
+
+        /* issue #309: Стиль для отображения авто-определённой ExecutorGroup */
+        .new-individ-info-display {
+            padding: 8px 12px;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            font-size: 13px;
+            font-family: monospace;
+        }
+
+        /* ============================================================================= */
+        /* issue #309: Стили для кнопки Help в Del Concept modal                         */
+        /* ============================================================================= */
+
+        .del-concept-modal-header-buttons {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .del-concept-help-btn {
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 6px 12px;
+            font-size: 12px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .del-concept-help-btn:hover {
+            background-color: #1976D2;
+        }
+
+        /* ============================================================================= */
+        /* issue #370: Стили для модального окна Add hasNext Dia                         */
+        /* ============================================================================= */
+
+        .hasnext-dia-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .hasnext-dia-modal-content {
+            position: absolute;
+            background-color: white;
+            padding: 0;
+            border-radius: 8px;
+            width: 550px;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            top: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .hasnext-dia-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background-color: #5C6BC0;
+            color: white;
+            border-radius: 8px 8px 0 0;
+            cursor: move;
+        }
+
+        .hasnext-dia-modal-header h3 {
+            margin: 0;
+            font-size: 16px;
+        }
+
+        .hasnext-dia-modal-header-buttons {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .hasnext-dia-help-btn {
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 6px 12px;
+            font-size: 12px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .hasnext-dia-help-btn:hover {
+            background-color: #1976D2;
+        }
+
+        .hasnext-dia-modal-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 0 5px;
+        }
+
+        .hasnext-dia-modal-body {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding: 20px;
+        }
+
+        .hasnext-dia-field {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .hasnext-dia-field label {
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .hasnext-dia-field input[type="text"] {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .hasnext-dia-hint {
+            color: #666;
+            font-style: italic;
+        }
+
+        .hasnext-dia-mode-options {
+            display: flex;
+            gap: 20px;
+            margin: 10px 0;
+        }
+
+        .hasnext-dia-checkbox-container {
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 8px;
+        }
+
+        .hasnext-dia-checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: normal;
+            font-size: 13px;
+            cursor: pointer;
+            padding: 4px 0;
+        }
+
+        .hasnext-dia-message {
+            padding: 10px 20px;
+            margin: 0;
+            font-size: 13px;
+        }
+
+        .hasnext-dia-message.success {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .hasnext-dia-message.error {
+            background-color: #ffebee;
+            color: #c62828;
+        }
+
+        .hasnext-dia-modal-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            padding: 15px 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .hasnext-dia-modal-buttons button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .hasnext-dia-cancel-btn {
+            background-color: #9e9e9e;
+            color: white;
+        }
+
+        .hasnext-dia-cancel-btn:hover {
+            background-color: #757575;
+        }
+
+        .hasnext-dia-sparql-btn {
+            background-color: #ff9800;
+            color: white;
+        }
+
+        .hasnext-dia-sparql-btn:hover {
+            background-color: #f57c00;
+        }
+
+        .hasnext-dia-create-btn {
+            background-color: #5C6BC0;
+            color: white;
+        }
+
+        .hasnext-dia-create-btn:hover {
+            background-color: #3F51B5;
+        }
+
+        /* ============================================================================= */
+        /* issue #309: Стили для кнопки и модального окна Virtual TriG                   */
+        /* ============================================================================= */
+
+        .show-virtual-trig-btn {
+            background-color: #0288D1 !important;
+            color: white !important;
+        }
+
+        .show-virtual-trig-btn:hover {
+            background-color: #0277BD !important;
+        }
+
+        .virtual-trig-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .virtual-trig-modal-content {
+            position: absolute;
+            background-color: white;
+            padding: 0;
+            border-radius: 8px;
+            width: 650px;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            top: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .virtual-trig-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background-color: #0288D1;
+            color: white;
+            border-radius: 8px 8px 0 0;
+            cursor: move;
+        }
+
+        .virtual-trig-modal-header h3 {
+            margin: 0;
+            font-size: 16px;
+        }
+
+        .virtual-trig-modal-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 0 5px;
+        }
+
+        .virtual-trig-modal-body {
+            padding: 20px;
+        }
+
+        .virtual-trig-textarea {
+            width: 100%;
+            box-sizing: border-box;
+            font-family: monospace;
+            font-size: 12px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            resize: vertical;
+            min-height: 300px;
+        }
+
+        .virtual-trig-modal-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            padding: 15px 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .virtual-trig-close-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            background-color: #9e9e9e;
+            color: white;
+        }
+
+        .virtual-trig-close-btn:hover {
+            background-color: #757575;
+        }
+
+        /* ============================================================================= */
+        /* issue #386: Стили для кнопки Методы диаграммы                                 */
+        /* ============================================================================= */
+
+        .diagram-methods-btn {
+            background-color: #7E57C2;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 4px 10px;
+            font-size: 12px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        .diagram-methods-btn:hover {
+            background-color: #5E35B1;
+        }
+
+        /* Выпадающий список методов диаграммы */
+        .diagram-methods-dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            z-index: 1000;
+            min-width: 150px;
+        }
+
+        .diagram-methods-dropdown.visible {
+            display: block;
+        }
+
+        .diagram-methods-dropdown-item {
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 13px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .diagram-methods-dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .diagram-methods-dropdown-item:hover {
+            background-color: #f5f5f5;
+        }
+
+        .diagram-methods-dropdown-empty {
+            padding: 8px 12px;
+            color: #999;
+            font-style: italic;
+            font-size: 13px;
+        }
+
+        /* ============================================================================= */
+        /* issue #406: Стили для кнопки Фильтр диаграммы                                */
+        /* ============================================================================= */
+
+        .diagram-filter-btn {
+            background-color: #26A69A;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 4px 10px;
+            font-size: 12px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        .diagram-filter-btn:hover {
+            background-color: #00897B;
+        }
+
+        /* Выпадающий список фильтров диаграммы */
+        .diagram-filter-dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            z-index: 1000;
+            min-width: 180px;
+        }
+
+        .diagram-filter-dropdown.visible {
+            display: block;
+        }
+
+        .diagram-filter-dropdown-item {
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 13px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+        }
+
+        .diagram-filter-dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .diagram-filter-dropdown-item:hover {
+            background-color: #f5f5f5;
+        }
+
+        .diagram-filter-dropdown-item.selected {
+            background-color: #E0F2F1;
+            font-weight: 500;
+        }
+
+        .diagram-filter-dropdown-item::before {
+            content: '';
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            margin-right: 8px;
+            border: 2px solid #26A69A;
+            border-radius: 50%;
+        }
+
+        .diagram-filter-dropdown-item.selected::before {
+            background-color: #26A69A;
+            box-shadow: inset 0 0 0 3px white;
+        }
+
+        /* ============================================================================= */
+        /* issue #386: Стили для модального окна Edit Label Concept Process              */
+        /* ============================================================================= */
+
+        .edit-label-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .edit-label-modal-content {
+            position: absolute;
+            background-color: white;
+            padding: 0;
+            border-radius: 8px;
+            width: 500px;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            top: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .edit-label-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background-color: #26A69A;
+            color: white;
+            border-radius: 8px 8px 0 0;
+            cursor: move;
+        }
+
+        .edit-label-modal-header h3 {
+            margin: 0;
+            font-size: 16px;
+        }
+
+        .edit-label-modal-header-buttons {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .edit-label-help-btn {
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 6px 12px;
+            font-size: 12px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .edit-label-help-btn:hover {
+            background-color: #1976D2;
+        }
+
+        .edit-label-modal-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 0 5px;
+        }
+
+        .edit-label-modal-body {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding: 20px;
+        }
+
+        .edit-label-field {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .edit-label-field label {
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .edit-label-field input[type="text"] {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .edit-label-message {
+            padding: 10px 20px;
+            margin: 0;
+            font-size: 13px;
+        }
+
+        .edit-label-message.success {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .edit-label-message.error {
+            background-color: #ffebee;
+            color: #c62828;
+        }
+
+        .edit-label-modal-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            padding: 15px 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .edit-label-modal-buttons button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .edit-label-cancel-btn {
+            background-color: #9e9e9e;
+            color: white;
+        }
+
+        .edit-label-cancel-btn:hover {
+            background-color: #757575;
+        }
+
+        .edit-label-sparql-btn {
+            background-color: #ff9800;
+            color: white;
+        }
+
+        .edit-label-sparql-btn:hover {
+            background-color: #f57c00;
+        }
+
+        .edit-label-create-btn {
+            background-color: #26A69A;
+            color: white;
+        }
+
+        .edit-label-create-btn:hover {
+            background-color: #00897B;
+        }

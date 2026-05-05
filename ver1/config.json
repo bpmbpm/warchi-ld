@@ -1,0 +1,10 @@
+{
+  "1_example_data": { "collapsed": false },
+  "2_triplestore": { "collapsed": true },
+  "3_sd": { "collapsed": true },
+  "4_resSPARQL": { "collapsed": false },
+  "5_publisher": { "collapsed": false },
+  "6_legend": { "collapsed": true },
+  "7_info": { "collapsed": true },
+  "8_infoSPARQL": { "collapsed": false }
+}
