@@ -1,5 +1,5 @@
 ### programming information
-Это памятка к программированию по проекту rdf-grapher. Папка проекта: https://github.com/bpmbpm/rdf-grapher/tree/main/ver9d  
+Это памятка к программированию по проекту warchi-ld. Папка проекта: https://github.com/bpmbpm/rdf-grapher/tree/main/ver9d  
 Можно изменять только эту и вложенные в нее папку.  
 Комментарии в коде и файлы md создавай на русском языке.  
 
