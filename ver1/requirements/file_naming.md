@@ -48,8 +48,8 @@
 ## 2 Общие рекомендации
 1. Не рекомендуется менять номера существующих модулей, так как это потребует обновления всех ссылок.
 2. Минимизируй файл index.html.
-3. В модуль 9_vadlib размещай наиболее часто используемый код в проекте, включая реализацию funSPARQLvalues и подобных.  
+3. В модуль 9_vadlib размещай наиболее часто используемый код в проекте (базовая библиотека)  
 Минимизация зависимостей: каждый модуль должен зависеть только от `9_vadlib_` (vadlib_logic.js и vadlib_sparql.js и других) и, при необходимости, от данных в глобальных переменных
 4. **SPARQL-driven Programming:** все SPARQL запросы размещайте в `_sparql.js` файлах, а не inline в коде логики.  
 **Типовые SPARQL запросы:** запросы, используемые несколькими модулями, выносите в `vadlib_sparql.js`
-5. **Документация:** соблюдай [auto documentation requirements](https://github.com/bpmbpm/rdf-grapher/blob/main/ver9d/doc/autodoc.md)
+5. **Документация:** соблюдай [auto documentation requirements](https://github.com/bpmbpm/warchi-ld/blob/main/ver1/doc/autodoc.md)
