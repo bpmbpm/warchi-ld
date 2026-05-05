@@ -1,6 +1,5 @@
 # Пример TriG VADv8 (Value Added Chain Diagram с иерархией TriG) rdfs:label для vad:ExecutorGroup 
 # Исполнители определены в vad:rtree (Дерево Исполнителей)
-# https://github.com/bpmbpm/rdf-grapher/blob/main/ver9d/requirements/problem.md#name
 
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
