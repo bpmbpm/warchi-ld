@@ -1,0 +1,200 @@
+/* issue #408: Стили для функциональности поиска в TreeView */
+
+/* Кнопка "Найти" в заголовке дерева TriG */
+.trig-tree-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.trig-tree-find-btn {
+    background-color: white;
+    color: #4CAF50;
+    border: 1px solid white;
+    padding: 5px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: bold;
+    transition: all 0.2s;
+}
+
+.trig-tree-find-btn:hover {
+    background-color: #f0f0f0;
+    border-color: #f0f0f0;
+}
+
+/* Диалоговое окно поиска */
+.trig-search-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+}
+
+.trig-search-dialog {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    min-width: 400px;
+    max-width: 500px;
+}
+
+.trig-search-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #4CAF50;
+}
+
+.trig-search-title {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
+
+.trig-search-close-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #999;
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    line-height: 24px;
+    text-align: center;
+}
+
+.trig-search-close-btn:hover {
+    color: #333;
+}
+
+.trig-search-body {
+    margin-bottom: 15px;
+}
+
+.trig-search-input-group {
+    margin-bottom: 15px;
+}
+
+.trig-search-label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 13px;
+    color: #666;
+    font-weight: bold;
+}
+
+.trig-search-input {
+    width: 100%;
+    padding: 8px 12px;
+    border: 2px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+}
+
+.trig-search-input:focus {
+    outline: none;
+    border-color: #4CAF50;
+}
+
+.trig-search-status {
+    margin-top: 10px;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 13px;
+    display: none;
+}
+
+.trig-search-status.success {
+    background-color: #E8F5E9;
+    color: #2E7D32;
+    border: 1px solid #A5D6A7;
+    display: block;
+}
+
+.trig-search-status.error {
+    background-color: #FFEBEE;
+    color: #C62828;
+    border: 1px solid #EF9A9A;
+    display: block;
+}
+
+.trig-search-status.info {
+    background-color: #E3F2FD;
+    color: #1565C0;
+    border: 1px solid #90CAF9;
+    display: block;
+}
+
+.trig-search-footer {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.trig-search-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: bold;
+    transition: all 0.2s;
+}
+
+.trig-search-btn-primary {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.trig-search-btn-primary:hover {
+    background-color: #45a049;
+}
+
+.trig-search-btn-primary:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.trig-search-btn-secondary {
+    background-color: #2196F3;
+    color: white;
+}
+
+.trig-search-btn-secondary:hover {
+    background-color: #1976D2;
+}
+
+.trig-search-btn-secondary:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+/* Подсветка найденного элемента */
+.trig-tree-item.search-highlight {
+    background-color: #FFF59D !important;
+    animation: searchHighlight 0.5s ease;
+}
+
+@keyframes searchHighlight {
+    0% {
+        background-color: #FFEB3B;
+    }
+    100% {
+        background-color: #FFF59D;
+    }
+}
+

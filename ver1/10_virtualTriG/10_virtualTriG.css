@@ -1,0 +1,72 @@
+/* Ссылка на issue: https://github.com/bpmbpm/rdf-grapher/issues/317 */
+/* 10_virtualTriG.css - Стили для модуля Virtual TriG */
+
+/* Секция Virtual TriG в панели свойств */
+.virtual-trig-section {
+    margin-top: 15px;
+    padding: 10px;
+    background-color: #e3f2fd;
+    border: 1px solid #90caf9;
+    border-radius: 4px;
+}
+
+.virtual-trig-section-header {
+    font-weight: bold;
+    color: #1565c0;
+    margin-bottom: 8px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #90caf9;
+}
+
+.virtual-trig-section-content {
+    font-size: 13px;
+}
+
+.virtual-trig-property {
+    display: flex;
+    margin-bottom: 5px;
+}
+
+.virtual-trig-property .property-label {
+    color: #666;
+    margin-right: 8px;
+    min-width: 120px;
+}
+
+.virtual-trig-property .property-value {
+    color: #1565c0;
+    font-weight: 500;
+}
+
+/* Кнопка пересчёта в модальном окне */
+.virtual-trig-recalc-btn {
+    padding: 10px 20px;
+    background-color: #2196F3;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    margin-right: 10px;
+}
+
+.virtual-trig-recalc-btn:hover {
+    background-color: #1976D2;
+}
+
+/* Кнопка копирования в модальном окне */
+.virtual-trig-copy-btn {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    margin-right: 10px;
+}
+
+.virtual-trig-copy-btn:hover {
+    background-color: #388E3C;
+}
+

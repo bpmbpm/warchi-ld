@@ -1,0 +1,170 @@
+{
+  "format": "warchi",
+  "version": "1.0",
+  "notation": "VAD",
+  "source": "warchi-ld ver1 — аналог Trig_VADv8.ttl",
+  "description": "Пример схемы VAD в формате warchi (JSON). Аналог Trig_VADv8.ttl. Конвертируется в TriG через warchi_ld_convert.js",
+  "processes": [
+    {
+      "id": "p1",
+      "label": "p1 Процесс 1",
+      "description": "p1 Процесс 1",
+      "parent": "ptree",
+      "diagram": "t_p1"
+    },
+    {
+      "id": "p1_1",
+      "label": "p1_1 Процесс 1_1",
+      "description": "Первый процесс в цепочке добавленной стоимости",
+      "parent": "p1",
+      "diagram": "t_p1_1"
+    },
+    {
+      "id": "p1_2",
+      "label": "Процесс 1_2",
+      "description": "Второй процесс, выполняется после Процесса 1",
+      "parent": "p1"
+    },
+    {
+      "id": "p1_1_1",
+      "label": "p1_1_1 Процесс 1_1_1",
+      "description": "Первый процесс в цепочке добавленной стоимости",
+      "parent": "p1_1"
+    },
+    {
+      "id": "p1_1_2",
+      "label": "p1_1_2 Процесс 1_1_2",
+      "description": "Второй процесс в цепочке добавленной стоимости",
+      "parent": "p1_1"
+    },
+    {
+      "id": "p2",
+      "label": "p2 Процесс 2",
+      "description": "p2 Процесс 2",
+      "parent": "ptree",
+      "diagram": "t_p2"
+    },
+    {
+      "id": "p2_1",
+      "label": "p2_1 Процесс 2_1",
+      "description": "Первый процесс в цепочке добавленной стоимости",
+      "parent": "p2"
+    },
+    {
+      "id": "p2_2",
+      "label": "p2_2 Процесс 2_2",
+      "description": "Второй процесс",
+      "parent": "p2"
+    },
+    {
+      "id": "px_x",
+      "label": "px_x Процесс х.х",
+      "description": "Какой-то процесс",
+      "parent": "pNotDefined"
+    },
+    {
+      "id": "pNotDefined",
+      "label": "pNotDefined Процесс",
+      "description": "Какой-то процесс",
+      "parent": "ptree"
+    },
+    {
+      "id": "pDel",
+      "label": "Процесс pDel на удаление",
+      "description": "Какой-то процесс",
+      "parent": "ptree"
+    }
+  ],
+  "executors": [
+    { "id": "Org-structure", "label": "Исполнитель Org-structure", "parent": "rtree" },
+    { "id": "Executor1", "label": "Исполнитель 1", "parent": "Org-structure" },
+    { "id": "Executor2", "label": "Исполнитель 2", "parent": "Org-structure" },
+    { "id": "Executor3", "label": "Исполнитель 3", "parent": "Org-structure" },
+    { "id": "Executor4", "label": "Исполнитель 4", "parent": "Org-structure" },
+    { "id": "Executor5", "label": "Исполнитель 5", "parent": "Org-structure" },
+    { "id": "Executor6", "label": "Исполнитель 6", "parent": "Org-structure" },
+    { "id": "Executor7", "label": "Исполнитель 7", "parent": "Org-structure" },
+    { "id": "Executor8", "label": "Исполнитель 8", "parent": "Org-structure" },
+    { "id": "Executor21", "label": "Исполнитель 21", "parent": "Org-structure" },
+    { "id": "Executor22", "label": "Исполнитель 22", "parent": "Org-structure" },
+    { "id": "Executor23", "label": "Исполнитель 23", "parent": "Org-structure" },
+    { "id": "Executor24", "label": "Исполнитель 24", "parent": "Org-structure" },
+    { "id": "Executor25", "label": "Исполнитель 25", "parent": "Org-structure" },
+    { "id": "Executor26", "label": "Исполнитель 26", "parent": "Org-structure" },
+    { "id": "Executor27", "label": "Исполнитель 27", "parent": "Org-structure" },
+    { "id": "Executor28", "label": "Исполнитель 28", "parent": "Org-structure" }
+  ],
+  "diagrams": [
+    {
+      "id": "t_p1",
+      "label": "Схема t_p1 процесса p1",
+      "parentProcess": "p1",
+      "items": [
+        {
+          "id": "p1_1",
+          "ref": "p1_1",
+          "next": "p1_2",
+          "executors": ["Executor1"]
+        },
+        {
+          "id": "p1_2",
+          "ref": "p1_2",
+          "executors": ["Executor1", "Executor2"]
+        }
+      ]
+    },
+    {
+      "id": "t_p1_1",
+      "label": "Схема t_p1_1 процесса p1_1",
+      "parentProcess": "p1_1",
+      "items": [
+        {
+          "id": "p1_1_1",
+          "ref": "p1_1_1",
+          "next": "p1_1_2",
+          "executors": ["Executor21"]
+        },
+        {
+          "id": "p1_1_2",
+          "ref": "p1_1_2",
+          "executors": ["Executor21", "Executor22"]
+        }
+      ]
+    },
+    {
+      "id": "t_p2",
+      "label": "Схема t_p2 процесса p2",
+      "parentProcess": "p2",
+      "items": [
+        {
+          "id": "p2_1",
+          "ref": "p2_1",
+          "next": "p2_2",
+          "executors": ["Executor1"]
+        },
+        {
+          "id": "p2_2",
+          "ref": "p2_2",
+          "executors": ["Executor1", "Executor2"]
+        },
+        {
+          "id": "p1_1",
+          "ref": "p1_1",
+          "next": "p1_1_1",
+          "executors": ["Executor1", "Executor2"]
+        },
+        {
+          "id": "p1_1_1",
+          "ref": "p1_1_1",
+          "next": "px_x",
+          "executors": ["Executor1", "Executor2"]
+        },
+        {
+          "id": "px_x",
+          "ref": "px_x",
+          "executors": ["Executor1", "Executor2"]
+        }
+      ]
+    }
+  ]
+}
